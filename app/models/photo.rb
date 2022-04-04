@@ -4,7 +4,7 @@ require 'json'
 require 'base64'
 require 'rbnacl'
 
-module Dfans
+module DFans
   STORE_DIR = 'app/db/store'
 
   # Holds a full secret photo
@@ -32,24 +32,24 @@ module Dfans
 
     # File store must be setup once when application runs
     def self.setup
-      Dir.mkdir(Dfans::STORE_DIR) unless Dir.exist? Dfans::STORE_DIR
+      Dir.mkdir(DFans::STORE_DIR) unless Dir.exist? DFans::STORE_DIR
     end
 
     # Stores photo in file store
     def save
-      File.write("#{Dfans::STORE_DIR}/#{@id}.txt", to_json)
+      File.write("#{DFans::STORE_DIR}/#{@id}.txt", to_json)
     end
 
     # Query method to find one photo
     def self.find(find_id)
-      photo_file = File.read("#{Dfans::STORE_DIR}/#{find_id}.txt")
+      photo_file = File.read("#{DFans::STORE_DIR}/#{find_id}.txt")
       Photo.new JSON.parse(photo_file)
     end
 
     # Query method to retrieve index of all photos
     def self.all
-      Dir.glob("#{Dfans::STORE_DIR}/*.txt").map do |file|
-        file.match(%r{#{Regexp.quote(Dfans::STORE_DIR)}/(.*)\.txt})[1]
+      Dir.glob("#{DFans::STORE_DIR}/*.txt").map do |file|
+        file.match(%r{#{Regexp.quote(DFans::STORE_DIR)}/(.*)\.txt})[1]
       end
     end
 
