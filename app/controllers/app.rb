@@ -5,8 +5,8 @@ require 'json'
 
 require_relative '../models/document'
 
-module Credence
-  # Web controller for Credence API
+module Photo
+  # Web controller for Photo API
   class Api < Roda
     plugin :environments
     plugin :halt
@@ -20,7 +20,7 @@ module Credence
 
       routing.root do
         response.status = 200
-        { message: 'CredenceAPI up at /api/v1' }.to_json
+        { message: 'PhotoAPI up at /api/v1' }.to_json
       end
 
       routing.on 'api' do
