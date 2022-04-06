@@ -3,24 +3,26 @@
 require 'roda'
 require 'json'
 
-require_relative '../models/document'
+require_relative '../models/Photo'
 
-module Photo
-  # Web controller for Photo API
+module DFans
+  # Web controller for DFans API
   class Api < Roda
+    # Provide 'response' ,'routing', etc
+    # we use plugin to enable the functions from the parent (Roda), which are not being set as default
     plugin :environments
     plugin :halt
 
     configure do
-      Document.setup
+      Photo.setup # See the model file Photo class
     end
 
     route do |routing| # rubocop:disable Metrics/BlockLength
-      response['Content-Type'] = 'application/json'
+      response['Content-Type'] = 'application/json' # it behave like a Hash #Set Http response Header as 'application/json'
 
-      routing.root do
+      routing.root do # Leverage the object 'routing' inherit from Roda
         response.status = 200
-        { message: 'PhotoAPI up at /api/v1' }.to_json
+        { message: 'DFans up at /api/v1' }.to_json # Hash it , then convert it into json, send the body of json back to client
       end
 
       routing.on 'api' do
@@ -29,28 +31,30 @@ module Photo
             # GET api/v1/documents/[id]
             routing.get String do |id|
               response.status = 200
-              Document.find(id).to_json
+              # Call the Photo model to find the doc with the specific ID, and convert it into Json
+              Photo.find(id).to_json
             rescue StandardError
-              routing.halt 404, { message: 'Document not found' }.to_json
+              # if any error happens in these block, 'halt' this request and show 'Photo not found'
+              routing.halt 404, { message: 'Photo not found' }.to_json
             end
 
             # GET api/v1/documents
             routing.get do
               response.status = 200
-              output = { document_ids: Document.all }
+              output = { Photo_ids: Photo.all } 
               JSON.pretty_generate(output)
             end
 
             # POST api/v1/documents
             routing.post do
-              new_data = JSON.parse(routing.body.read)
-              new_doc = Document.new(new_data)
+              new_data = JSON.parse(routing.body.read) # read the bbody of whole string and parse it into JSON
+              new_doc = Photo.new(new_data)
 
               if new_doc.save
-                response.status = 201
-                { message: 'Document saved', id: new_doc.id }.to_json
+                response.status = 201 # 201 =>means create sth for you
+                { message: 'Photo saved', id: new_doc.id }.to_json
               else
-                routing.halt 400, { message: 'Could not save document' }.to_json
+                routing.halt 500, { message: 'Could not save photo' }.to_json
               end
             end
           end
