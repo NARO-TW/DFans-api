@@ -3,7 +3,7 @@
 require 'roda'
 require 'json'
 
-require_relative '../models/Photo'
+require_relative '../models/photo'
 
 module DFans
   # Web controller for DFans API
@@ -27,8 +27,8 @@ module DFans
 
       routing.on 'api' do
         routing.on 'v1' do
-          routing.on 'documents' do
-            # GET api/v1/documents/[id]
+          routing.on 'photos' do
+            # GET api/v1/photos/[id]
             routing.get String do |id|
               response.status = 200
               # Call the Photo model to find the doc with the specific ID, and convert it into Json
@@ -38,14 +38,14 @@ module DFans
               routing.halt 404, { message: 'Photo not found' }.to_json
             end
 
-            # GET api/v1/documents
+            # GET api/v1/photos
             routing.get do
               response.status = 200
               output = { Photo_ids: Photo.all } 
               JSON.pretty_generate(output)
             end
 
-            # POST api/v1/documents
+            # POST api/v1/photos
             routing.post do
               new_data = JSON.parse(routing.body.read) # read the bbody of whole string and parse it into JSON
               new_doc = Photo.new(new_data)
