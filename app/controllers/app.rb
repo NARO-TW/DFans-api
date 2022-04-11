@@ -8,14 +8,7 @@ require_relative '../models/photo'
 module DFans
   # Web controller for DFans API
   class Api < Roda
-    # Provide 'response' ,'routing', etc
-    # we use plugin to enable the functions from the parent (Roda), which are not being set as default
-    plugin :environments
     plugin :halt
-
-    configure do
-      Photo.setup # See the model file Photo class
-    end
 
     route do |routing| # rubocop:disable Metrics/BlockLength
       response['Content-Type'] = 'application/json' # it behave like a Hash #Set Http response Header as 'application/json'

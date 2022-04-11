@@ -1,13 +1,13 @@
 ---
 - name: Pet Family
   description: My pet family.
-  tags: 
-    - dog
-    - cat
-    - family
+  #tags: 
+  #  - dog
+  #  - cat
+  #  - family
 - name: Pet Kingdom
   description: A kingdom governed by pets.
-  tags: 
-    - pig
-    - fish
-    - monkey
+  #tags: 
+  #  - pig
+  #  - fish
+  #  - monkey

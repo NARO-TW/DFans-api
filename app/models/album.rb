@@ -4,9 +4,10 @@ require 'json'
 require 'sequel'
 
 module DFans
-  # Models a secret document
-  class Photo < Sequel::Model
-    many_to_one :album
+  # Models a project
+  class Album < Sequel::Model
+    one_to_many :photos
+    plugin :association_dependencies, photos: :destroy
 
     plugin :timestamps
 
@@ -15,16 +16,12 @@ module DFans
       JSON(
         {
           data: {
-            type: 'photo',
+            type: 'album',
             attributes: {
               id: id,
-              filename: filename,
-              relative_path: relative_path,
-              description: description
+              name: name,
+              #tags: tags
             }
-          },
-          included: {
-            album: album
           }
         }, options
       )
