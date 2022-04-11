@@ -57,7 +57,8 @@ namespace :db do
 
   desc 'Destroy data in database; maintain tables'
   task :delete => :load do
-    DFans::Account.dataset.destroy
+    @app.DB[:photos].delete
+    @app.DB[:albums].delete
   end
 
   desc 'Delete dev or test database file'

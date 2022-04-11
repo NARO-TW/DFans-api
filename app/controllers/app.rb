@@ -10,46 +10,85 @@ module DFans
   class Api < Roda
     plugin :halt
 
-    route do |routing| # rubocop:disable Metrics/BlockLength
-      response['Content-Type'] = 'application/json' # it behave like a Hash #Set Http response Header as 'application/json'
+    route do |routing|
+      response['Content-Type'] = 'application/json'
 
-      routing.root do # Leverage the object 'routing' inherit from Roda
-        response.status = 200
-        { message: 'DFans up at /api/v1' }.to_json # Hash it , then convert it into json, send the body of json back to client
+      routing.root do
+        { message: 'DFans up at /api/v1' }.to_json
       end
 
-      routing.on 'api' do
-        routing.on 'v1' do
-          routing.on 'photos' do
-            # GET api/v1/photos/[id]
-            routing.get String do |id|
-              response.status = 200
-              # Call the Photo model to find the doc with the specific ID, and convert it into Json
-              Photo.find(id).to_json
-            rescue StandardError
-              # if any error happens in these block, 'halt' this request and show 'Photo not found'
-              routing.halt 404, { message: 'Photo not found' }.to_json
-            end
+      @api_root = 'api/v1'
+      routing.on @api_root do
+        routing.on 'albums' do
+          @album_route = "#{@api_root}/albums"
 
-            # GET api/v1/photos
-            routing.get do
-              response.status = 200
-              output = { Photo_ids: Photo.all } 
-              JSON.pretty_generate(output)
-            end
+          routing.on String do |album_id|
+            # Photo part will be fixed by Leo
+            routing.on 'photos' do
+              @doc_route = "#{@api_root}/albums/#{proj_id}/documents"
+              # GET api/v1/projects/[proj_id]/documents/[doc_id]
+              routing.get String do |doc_id|
+                doc = Document.where(project_id: proj_id, id: doc_id).first
+                doc ? doc.to_json : raise('Document not found')
+              rescue StandardError => e
+                routing.halt 404, { message: e.message }.to_json
+              end
 
-            # POST api/v1/photos
-            routing.post do
-              new_data = JSON.parse(routing.body.read) # read the bbody of whole string and parse it into JSON
-              new_doc = Photo.new(new_data)
+              # GET api/v1/projects/[proj_id]/documents
+              routing.get do
+                output = { data: Project.first(id: proj_id).documents }
+                JSON.pretty_generate(output)
+              rescue StandardError
+                routing.halt 404, message: 'Could not find documents'
+              end
 
-              if new_doc.save
-                response.status = 201 # 201 =>means create sth for you
-                { message: 'Photo saved', id: new_doc.id }.to_json
-              else
-                routing.halt 500, { message: 'Could not save photo' }.to_json
+              # POST api/v1/projects/[ID]/documents
+              routing.post do
+                new_data = JSON.parse(routing.body.read)
+                proj = Project.first(id: proj_id)
+                new_doc = proj.add_document(new_data)
+
+                if new_doc
+                  response.status = 201
+                  response['Location'] = "#{@doc_route}/#{new_doc.id}"
+                  { message: 'Document saved', data: new_doc }.to_json
+                else
+                  routing.halt 400, 'Could not save document'
+                end
+
+              rescue StandardError
+                routing.halt 500, { message: 'Database error' }.to_json
               end
             end
+
+            # GET api/v1/albums/[ID]
+            routing.get do
+              album = Album.first(id: album_id)
+              album ? album.to_json : raise('Album not found')
+            rescue StandardError => e
+              routing.halt 404, { message: e.message }.to_json
+            end
+          end
+
+          # GET api/v1/albums
+          routing.get do
+            output = { data: Album.all }
+            JSON.pretty_generate(output)
+          rescue StandardError
+            routing.halt 404, { message: 'Could not find albums' }.to_json
+          end
+
+          # POST api/v1/albums
+          routing.post do
+            new_data = JSON.parse(routing.body.read)
+            new_album = Album.new(new_data)
+            raise('Could not save album') unless new_album.save
+
+            response.status = 201
+            response['Location'] = "#{@album_route}/#{new_album.id}"
+            { message: 'Album saved', data: new_album }.to_json
+          rescue StandardError => e
+            routing.halt 400, { message: e.message }.to_json
           end
         end
       end
