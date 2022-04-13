@@ -14,12 +14,12 @@ gem 'rake'
 # Security
 gem 'bundler-audit'
 gem 'rbnacl', '~>7'
-
+#gem install sqlite3 -v 1.3.6
 # Database
 gem 'hirb'
 gem 'sequel', '~>5'
 group :development, :test do
-  gem 'sqlite3'
+  gem 'sqlite3' , '~>1.3.6'
 end
 
 # Performance
