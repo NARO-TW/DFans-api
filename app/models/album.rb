@@ -18,9 +18,9 @@ module DFans
           data: {
             type: 'album',
             attributes: {
-              id: id,
-              name: name,
-              #tags: tags
+              id:,
+              name:
+              # tags: tags
             }
           }
         }, options
