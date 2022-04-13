@@ -22,8 +22,7 @@ module DFans
         routing.on 'albums' do
           @album_route = "#{@api_root}/albums"
 
-          routing.on String do |album_id| 
-            # Photo part will be fixed by Leo 
+          routing.on String do |album_id|# Photo part will be fixed by Leo
             routing.on 'photos' do
               @doc_route = "#{@api_root}/albums/#{album_id}/photos"
               # GET api/v1/albums/[album_id]/photos/[photo_id]

@@ -9,7 +9,7 @@ Sequel.migration do
 
       String :name, unique: true, null: false
       String :description, unique: false
-      #String [:tags]
+      # String [:tags]
 
       DateTime :created_at
       DateTime :updated_at
