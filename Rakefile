@@ -10,6 +10,11 @@ task :api_spec do
   sh 'ruby spec/api_spec.rb'
 end
 
+desc 'Tests Photos specs only'
+task :photos_spec do
+  sh 'ruby spec/photos_spec.rb'
+end
+
 desc 'Test all the specs'
 Rake::TestTask.new(:spec) do |t|
   t.pattern = 'spec/*_spec.rb'

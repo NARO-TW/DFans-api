@@ -20,6 +20,14 @@ GEM
     minitest-rg (5.2.0)
       minitest (~> 5.0)
     nio4r (2.5.8)
+    nokogiri (1.13.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.4-x64-mingw32)
+      racc (~> 1.4)
+    nokogiri (1.13.4-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.4-x86_64-linux)
+      racc (~> 1.4)
     parallel (1.22.1)
     parser (3.1.1.0)
       ast (~> 2.4.1)
@@ -28,11 +36,11 @@ GEM
       method_source (~> 1.0)
     puma (5.6.4)
       nio4r (~> 2.0)
+    racc (1.6.0)
     rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rainbow (3.1.1)
-    rake (13.0.6)
     rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -77,10 +85,11 @@ DEPENDENCIES
   json
   minitest
   minitest-rg
+  nokogiri (~> 1.6, >= 1.6.8)
   pry
   puma (~> 5.6)
+  rack (>= 2.0.6)
   rack-test
-  rake
   rbnacl (~> 7)
   rerun
   roda (~> 3.54)

@@ -8,8 +8,8 @@ Sequel.migration do
       primary_key :id
 
       String :name, unique: true, null: false
-      String :description
-      #String [:tags]
+      String :description, unique: false
+      # String [:tags]
 
       DateTime :created_at
       DateTime :updated_at

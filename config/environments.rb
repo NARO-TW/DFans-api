@@ -18,14 +18,15 @@ module DFans
 
     # Make the environment variables accessible to other classes
     def self.config
-      return Figaro.env
+      Figaro.env
     end
 
     # Connect and make the database accessible to other classes
     db_url = ENV.delete('DATABASE_URL')
     DB = Sequel.connect("#{db_url}?encoding=utf8")
     def self.DB
-      return DB # rubocop:disable Naming/MethodName
+      DB
+      # rubocop:disable Naming/MethodName
     end
 
     configure :development, :test do
