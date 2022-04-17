@@ -22,7 +22,7 @@ describe 'Test Album Handling' do
       _(result['data'].count).must_equal 2
     end
 
-    it 'HAPPY: should be able to get details of a single project' do
+    it 'HAPPY: should be able to get details of a single album' do
       existing_proj = DATA[:albums][1]
       DFans::Album.create(existing_proj)
       id = DFans::Album.first.id
@@ -35,7 +35,7 @@ describe 'Test Album Handling' do
       _(result['data']['attributes']['name']).must_equal existing_proj['name']
     end
 
-    it 'SAD: should return error if unknown project requested' do
+    it 'SAD: should return error if unknown album requested' do
       get '/api/v1/albums/foobar'
 
       _(last_response.status).must_equal 404
