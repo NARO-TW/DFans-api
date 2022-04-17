@@ -41,7 +41,7 @@ module DFans
                 routing.halt 404, message: 'Could not find photos'
               end
               
-              # POST api/v1/projects/[proj_id]/documents
+              # POST api/v1/albums/[proj_id]/photos  updated 220417
               routing.post do
                 new_data = JSON.parse(routing.body.read)
                 proj = Album.first(id: proj_id)
@@ -109,6 +109,7 @@ module DFans
           rescue Sequel::MassAssignmentRestriction
             Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
             routing.halt 400, { message: 'Illegal Attributes' }.to_json
+
           rescue StandardError => e
             Api.logger.error "UNKOWN ERROR: #{e.message}"
             routing.halt 500, { message: 'Unknown server error' }.to_json
