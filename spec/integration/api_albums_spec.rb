@@ -12,7 +12,7 @@ describe 'Test Album Handling' do
   describe 'Getting Albums' do
     it 'HAPPY: should be able to get list of all albums' do
       DFans::Album.create(DATA[:albums][0])
-      Credence::Album.create(DATA[:albums][1])
+      DFans::Album.create(DATA[:albums][1])
 
       get 'api/v1/albums'
       _(last_response.status).must_equal 200
@@ -41,8 +41,8 @@ describe 'Test Album Handling' do
     end
 
     it 'SECURITY: should prevent basic SQL injection targeting IDs' do
-      Credence::Album.create(name: 'New Album')
-      Credence::Album.create(name: 'Newer Album')
+      DFans::Album.create(name: 'New Album')
+      DFans::Album.create(name: 'Newer Album')
       get 'api/v1/albums/2%20or%20id%3E0'
 
       # deliberately not reporting error -- don't give attacker information
