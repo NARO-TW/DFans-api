@@ -22,7 +22,7 @@ module DFans
         routing.on 'albums' do
           @album_route = "#{@api_root}/albums"
 
-          routing.on String do |album_id|# Photo part will be fixed by Leo
+          routing.on String do |album_id|
             routing.on 'photos' do
               @doc_route = "#{@api_root}/albums/#{album_id}/photos"
               # GET api/v1/albums/[album_id]/photos/[photo_id]
@@ -33,33 +33,51 @@ module DFans
                 routing.halt 404, { message: e.message }.to_json
               end
 
-              # GET api/v1/albums/[album_id]/photos
+              # GET api/v1/albums/[album_id]/photos  OK
               routing.get do
-                output = { data: Project.first(id: album_id).photos }
+                output = { data: Album.first(id: album_id).photos }
                 JSON.pretty_generate(output)
               rescue StandardError
                 routing.halt 404, message: 'Could not find photos'
               end
-
-              # POST api/v1/albums/[ID]/photos
+              
+              # POST api/v1/projects/[proj_id]/documents
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                proj = Project.first(id: album_id)
-                new_photo = proj.add_document(new_data)
+                proj = Album.first(id: proj_id)
+                new_doc = proj.add_document(new_data)
+                raise 'Could not save photo' unless new_doc
 
-                if new_photo
-                  # Create(Upload) a new photo
-                  response.status = 201
-                  response['Location'] = "#{@doc_route}/#{new_photo.id}"
-                  { message: 'Photo saved', data: new_photo }.to_json
-                else
-                  routing.halt 400, 'Could not save the photo uploaded'
-                end
-
-              rescue StandardError
-                routing.halt 500, { message: 'Database error' }.to_json
+                response.status = 201
+                response['Location'] = "#{@doc_route}/#{new_doc.id}"
+                { message: 'Photo saved', data: new_doc }.to_json
+              rescue Sequel::MassAssignmentRestriction
+                Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+                routing.halt 400, { message: 'Illegal Attributes' }.to_json
+              rescue StandardError => e
+                routing.halt 500, { message: e.message }.to_json
               end
             end
+            # this block of code is edition '220408'
+            #   # POST api/v1/albums/[album_id]/photos
+            #   routing.post do
+            #     new_data = JSON.parse(routing.body.read)
+            #     proj = Project.first(id: album_id)
+            #     new_photo = proj.add_document(new_data)
+                
+            #     if new_photo
+            #       # Create(Upload) a new photo
+            #       response.status = 201
+            #       response['Location'] = "#{@doc_route}/#{new_photo.id}"
+            #       { message: 'Photo saved', data: new_photo }.to_json
+            #     else
+            #       routing.halt 400, 'Could not save the photo uploaded'
+            #     end
+
+            #   rescue StandardError
+            #     routing.halt 500, { message: 'Database error' }.to_json
+            #   end
+            # end
 
             # GET api/v1/albums/[ID]
             routing.get do
@@ -78,17 +96,22 @@ module DFans
             routing.halt 404, { message: 'Could not find albums' }.to_json
           end
 
-          # POST api/v1/albums
+          # POST api/v1/projects   edition 220417 (this block of code is revised)
           routing.post do
             new_data = JSON.parse(routing.body.read)
-            new_album = Album.new(new_data)
-            raise('Could not save album') unless new_album.save
+            new_proj = Project.new(new_data)
+            raise('Could not save album') unless new_proj.save
 
             response.status = 201
             response['Location'] = "#{@album_route}/#{new_album.id}"
             { message: 'Album saved', data: new_album }.to_json
+
+          rescue Sequel::MassAssignmentRestriction
+            Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+            routing.halt 400, { message: 'Illegal Attributes' }.to_json
           rescue StandardError => e
-            routing.halt 400, { message: e.message }.to_json
+            Api.logger.error "UNKOWN ERROR: #{e.message}"
+            routing.halt 500, { message: 'Unknown server error' }.to_json
           end
         end
       end
