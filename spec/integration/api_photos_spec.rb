@@ -9,7 +9,7 @@ describe 'Test Photo Handling' do
     wipe_database
 
     DATA[:albums].each do |album_data|
-      Credence::Album.create(album_data)
+      DFans::Album.create(album_data)
     end
   end
 
@@ -28,7 +28,7 @@ describe 'Test Photo Handling' do
 
   it 'HAPPY: should be able to get details of a single photos' do
     doc_data = DATA[:photos][1]
-    proj = Credence::Album.first
+    proj = DFans::Album.first
     doc = proj.add_document(doc_data)
 
     get "/api/v1/albums/#{proj.id}/photos/#{doc.id}"
