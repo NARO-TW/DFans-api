@@ -7,8 +7,8 @@ Sequel.migration do
     create_table(:albums) do
       uuid :id, primary_key: true
 
-      String :name, unique: true, null: false
-      String :description, unique: false
+      String :name, null: false
+      String :description_secure
       # String [:tags]
 
       DateTime :created_at
