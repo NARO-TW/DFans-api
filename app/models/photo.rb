@@ -9,6 +9,8 @@ module DFans
     many_to_one :album
 
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :filename, :relative_path, :description
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
@@ -17,14 +19,14 @@ module DFans
           data: {
             type: 'photo',
             attributes: {
-              id:,
-              filename:,
-              relative_path:,
-              description:
+              id: @id,
+              filename: @filename,
+              relative_path: @relative_path,
+              description: @description
             }
           },
           included: {
-            album:
+            album: @album
           }
         }, options
       )

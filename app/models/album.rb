@@ -9,7 +9,10 @@ module DFans
     one_to_many :photos
     plugin :association_dependencies, photos: :destroy
 
+    plugin :uuid, field: :id
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :name
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
@@ -18,8 +21,8 @@ module DFans
           data: {
             type: 'album',
             attributes: {
-              id:,
-              name:
+              id: @id,
+              name: @name
               # tags: tags
             }
           }
