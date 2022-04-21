@@ -15,12 +15,12 @@ describe 'Test Photo Handling' do
   end
 
   it 'HAPPY: should be able to get list of all photos' do
-    proj = DFans::Album.first
-    DATA[:photos].each do |doc|
-      proj.add_document(doc)
+    album = DFans::Album.first
+    DATA[:photos].each do |pho|
+      album.add_photo(pho)
     end
 
-    get "api/v1/ablums/#{proj.id}/photos"
+    get "api/v1/albums/#{album.id}/photos"
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
@@ -28,51 +28,51 @@ describe 'Test Photo Handling' do
   end
 
   it 'HAPPY: should be able to get details of a single photo' do
-    doc_data = DATA[:photos][1]
-    proj = DFans::Album.first
-    doc = proj.add_document(doc_data)
+    pho_data = DATA[:photos][1]
+    album = DFans::Album.first
+    pho = album.add_photo(pho_data)
 
-    get "/api/v1/album/#{proj.id}/photos/#{doc.id}"
+    get "/api/v1/albums/#{album.id}/photos/#{pho.id}"
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
-    _(result['data']['attributes']['id']).must_equal doc.id
-    _(result['data']['attributes']['filename']).must_equal doc_data['filename']
+    _(result['data']['attributes']['id']).must_equal pho.id
+    _(result['data']['attributes']['filename']).must_equal pho_data['filename']
   end
 
   it 'SAD: should return error if unknown photo requested' do
-    proj = DFans::Album.first
-    get "/api/v1/albums/#{proj.id}/photos/foobar"
+    album = DFans::Album.first
+    get "/api/v1/albums/#{album.id}/photos/foobar"
 
     _(last_response.status).must_equal 404
   end
 
   describe 'Creating Photos' do
     before do
-      @proj = DFans::Album.first
-      @doc_data = DATA[:photos][1]
+      @album = DFans::Album.first
+      @pho_data = DATA[:photos][1]
       @req_header = { 'CONTENT_TYPE' => 'application/json' }
     end
 
     it 'HAPPY: should be able to create new photos' do
       req_header = { 'CONTENT_TYPE' => 'application/json' }
-      post "api/v1/albums/#{@proj.id}/photos",
-           @doc_data.to_json, req_header
+      post "api/v1/albums/#{@album.id}/photos",
+           @pho_data.to_json, req_header
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
       created = JSON.parse(last_response.body)['data']['data']['attributes']
-      doc = DFans::Photo.first
+      pho = DFans::Photo.first
 
-      _(created['id']).must_equal doc.id
-      _(created['filename']).must_equal @doc_data['filename']
-      _(created['description']).must_equal @doc_data['description']
+      _(created['id']).must_equal pho.id
+      _(created['filename']).must_equal @pho_data['filename']
+      _(created['description']).must_equal @pho_data['description']
     end
 
-    it 'SECURITY: should not create documents with mass assignment' do
-      bad_data = @doc_data.clone
+    it 'SECURITY: should not create photos with mass assignment' do
+      bad_data = @pho_data.clone
       bad_data['created_at'] = '1900-01-01'
-      post "api/v1/albums/#{@proj.id}/photos",
+      post "api/v1/albums/#{@album.id}/photos",
            bad_data.to_json, @req_header
 
       _(last_response.status).must_equal 400
@@ -104,8 +104,8 @@ end
 #     end
 
 #     it 'HAPPY: should be able to get details of a single album' do
-#       existing_proj = DATA[:albums][1]
-#       DFans::Album.create(existing_proj)
+#       existing_album = DATA[:albums][1]
+#       DFans::Album.create(existing_album)
 #       id = DFans::Album.first.id
 
 #       get "/api/v1/albums/#{id}"
@@ -113,7 +113,7 @@ end
 
 #       result = JSON.parse last_response.body
 #       _(result['data']['attributes']['id']).must_equal id
-#       _(result['data']['attributes']['name']).must_equal existing_proj['name']
+#       _(result['data']['attributes']['name']).must_equal existing_album['name']
 #     end
 
 #     it 'SAD: should return error if unknown album requested' do
@@ -136,24 +136,24 @@ end
 #   describe 'Creating New Albums' do
 #     before do
 #       @req_header = { 'CONTENT_TYPE' => 'application/json' }
-#       @proj_data = DATA[:albums][1]
+#       @album_data = DATA[:albums][1]
 #     end
 
 #     it 'HAPPY: should be able to create new albums' do
-#       post 'api/v1/albums', @proj_data.to_json, @req_header
+#       post 'api/v1/albums', @album_data.to_json, @req_header
 #       _(last_response.status).must_equal 201
 #       _(last_response.header['Location'].size).must_be :>, 0
 
 #       created = JSON.parse(last_response.body)['data']['data']['attributes']
-#       proj = DFans::Album.first
+#       album = DFans::Album.first
 
-#       _(created['id']).must_equal proj.id
-#       _(created['name']).must_equal @proj_data['name']
-#       _(created['repo_url']).must_equal @proj_data['repo_url']
+#       _(created['id']).must_equal album.id
+#       _(created['name']).must_equal @album_data['name']
+#       _(created['repo_url']).must_equal @album_data['repo_url']
 #     end
 
 #     it 'SECURITY: should not create album with mass assignment' do
-#       bad_data = @proj_data.clone
+#       bad_data = @album_data.clone
 #       bad_data['created_at'] = '1900-01-01'
 #       post 'api/v1/albums', bad_data.to_json, @req_header
 

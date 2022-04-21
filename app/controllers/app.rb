@@ -3,8 +3,6 @@
 require 'roda'
 require 'json'
 
-require_relative '../models/photo'
-
 module DFans
   # Web controller for DFans API
   class Api < Roda
@@ -24,11 +22,11 @@ module DFans
 
           routing.on String do |album_id|
             routing.on 'photos' do
-              @doc_route = "#{@api_root}/albums/#{album_id}/photos"
+              @pho_route = "#{@api_root}/albums/#{album_id}/photos"
               # GET api/v1/albums/[album_id]/photos/[photo_id]
               routing.get String do |photo_id|
-                doc = Photo.where(album_ID: album_id, id: photo_id).first
-                doc ? doc.to_json : raise('Photo not found')
+                pho = Photo.where(album_id: album_id, id: photo_id).first
+                pho ? pho.to_json : raise('Photo not found')
               rescue StandardError => e
                 routing.halt 404, { message: e.message }.to_json
               end
@@ -41,16 +39,16 @@ module DFans
                 routing.halt 404, message: 'Could not find photos'
               end
               
-              # POST api/v1/albums/[proj_id]/photos  updated 220417
+              # POST api/v1/albums/[album_id]/photos  updated 220417
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                proj = Album.first(id: proj_id)
-                new_doc = proj.add_document(new_data)
-                raise 'Could not save photo' unless new_doc
+                album = Album.first(id: album_id)
+                new_pho = album.add_photo(new_data)
+                raise 'Could not save photo' unless new_pho
 
                 response.status = 201
-                response['Location'] = "#{@doc_route}/#{new_doc.id}"
-                { message: 'Photo saved', data: new_doc }.to_json
+                response['Location'] = "#{@pho_route}/#{new_pho.id}"
+                { message: 'Photo saved', data: new_pho }.to_json
               rescue Sequel::MassAssignmentRestriction
                 Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
                 routing.halt 400, { message: 'Illegal Attributes' }.to_json
@@ -62,13 +60,13 @@ module DFans
             #   # POST api/v1/albums/[album_id]/photos
             #   routing.post do
             #     new_data = JSON.parse(routing.body.read)
-            #     proj = Project.first(id: album_id)
-            #     new_photo = proj.add_document(new_data)
+            #     album = Album.first(id: album_id)
+            #     new_photo = album.add_phoument(new_data)
                 
             #     if new_photo
             #       # Create(Upload) a new photo
             #       response.status = 201
-            #       response['Location'] = "#{@doc_route}/#{new_photo.id}"
+            #       response['Location'] = "#{@pho_route}/#{new_photo.id}"
             #       { message: 'Photo saved', data: new_photo }.to_json
             #     else
             #       routing.halt 400, 'Could not save the photo uploaded'
@@ -96,11 +94,11 @@ module DFans
             routing.halt 404, { message: 'Could not find albums' }.to_json
           end
 
-          # POST api/v1/projects   edition 220417 (this block of code is revised)
+          # POST api/v1/albumects   edition 220417 (this block of code is revised)
           routing.post do
             new_data = JSON.parse(routing.body.read)
-            new_proj = Project.new(new_data)
-            raise('Could not save album') unless new_proj.save
+            new_album = Album.new(new_data)
+            raise('Could not save album') unless new_album.save
 
             response.status = 201
             response['Location'] = "#{@album_route}/#{new_album.id}"

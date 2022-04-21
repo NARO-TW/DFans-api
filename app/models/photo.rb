@@ -28,14 +28,14 @@ module DFans
           data: {
             type: 'photo',
             attributes: {
-              id: @id,
-              filename: @filename,
-              relative_path: @relative_path,
-              description: @description
+              id: id,
+              filename: filename,
+              relative_path: relative_path,
+              description: description
             }
           },
           included: {
-            album: @album
+            album: album
           }
         }, options
       )

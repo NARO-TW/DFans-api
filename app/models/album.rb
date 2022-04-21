@@ -4,7 +4,7 @@ require 'json'
 require 'sequel'
 
 module DFans
-  # Models a project
+  # Models an album
   class Album < Sequel::Model
     one_to_many :photos
     plugin :association_dependencies, photos: :destroy
@@ -12,7 +12,7 @@ module DFans
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :name
+    set_allowed_columns :name, :description
 
     # Secure getters and setters
     def description
@@ -30,8 +30,8 @@ module DFans
           data: {
             type: 'album',
             attributes: {
-              id: @id,
-              name: @name
+              id: id,
+              name: name
               # tags: tags
             }
           }
