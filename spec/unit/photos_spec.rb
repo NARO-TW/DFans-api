@@ -14,9 +14,9 @@ describe 'Test Photo Handling' do
   end
 
   it 'HAPPY: should retrieve correct data from database' do
-    doc_data = DATA[:documents][1]
+    doc_data = DATA[:photos][1]
     proj = DFans::Album.first
-    new_doc = proj.add_document(doc_data)
+    new_doc = proj.add_photo(doc_data)
 
     doc = DFans::Photo.find(id: new_doc.id)
     _(doc.filename).must_equal doc_data['filename']
@@ -28,7 +28,7 @@ describe 'Test Photo Handling' do
   it 'SECURITY: should not use deterministic integers' do
     doc_data = DATA[:photos][1]
     proj = DFans::Album.first
-    new_doc = proj.add_document(doc_data)
+    new_doc = proj.add_photo(doc_data)
 
     _(new_doc.id.is_a?(Numeric)).must_equal false
   end
@@ -36,18 +36,27 @@ describe 'Test Photo Handling' do
   it 'SECURITY: should secure sensitive attributes' do
     doc_data = DATA[:photos][1]
     proj = DFans::Album.first
-    new_doc = proj.add_document(doc_data)
+    new_doc = proj.add_photo(doc_data)
     stored_doc = app.DB[:photos].first
 
     _(stored_doc[:description_secure]).wont_equal new_doc.description
     _(stored_doc[:content_secure]).wont_equal new_doc.content
   end
 
+  it 'SECURITY: should secure sensitive attributes' do
+    doc_data = DATA[:photos][1]
+    proj = DFans::Album.first
+    new_doc = proj.add_photo(doc_data)
+    stored_doc = app.DB[:photos].first
+
+    _(stored_doc[:description_secure]).wont_equal new_doc.description
+  end
+
   # it 'HAPPY: should be able to get list of all photos' do
   #   proj = DFans::Album.first
   #   DATA[:photos].each do |doc|
-  #     proj.add_document(doc)
-  #     # the attribute 'add_document' come from?
+  #     proj.add_photo(doc)
+  #     # the attribute 'add_photo' come from?
   #     # why not add_photos?
   #   end
 
@@ -58,12 +67,12 @@ describe 'Test Photo Handling' do
   #   _(result['data'].count).must_equal 2
   # end
 
-  # it 'HAPPY: should be able to get details of a single document' do
+  # it 'HAPPY: should be able to get details of a single photo' do
   #   doc_data = DATA[:photos][1]
   #   proj = DFans::Album.first
-  #   doc = proj.add_document(doc_data).save
+  #   doc = proj.add_photo(doc_data).save
 
-  #   get "/api/v1/albums/#{proj.id}/documents/#{doc.id}"
+  #   get "/api/v1/albums/#{proj.id}/photos/#{doc.id}"
   #   _(last_response.status).must_equal 200
 
   #   result = JSON.parse last_response.body
