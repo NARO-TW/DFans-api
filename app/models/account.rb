@@ -14,7 +14,7 @@ module DFans
     #             left_key: :collaborator_id, right_key: :album_id
 
     plugin :association_dependencies,
-           owned_albums: :destroy,
+           owned_albums: :destroy
     #       collaborations: :nullify
 
     plugin :whitelist_security
@@ -39,9 +39,9 @@ module DFans
       JSON(
         {
           type: 'account',
-          id:,
-          username:,
-          email:
+          id: id,
+          username: username,
+          email: email
         }, options
       )
     end

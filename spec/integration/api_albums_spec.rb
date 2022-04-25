@@ -68,7 +68,6 @@ describe 'Test Album Handling' do
 
       _(created['id']).must_equal pho.id
       _(created['name']).must_equal @pho_data['name']
-      _(created['repo_url']).must_equal @pho_data['repo_url']
     end
 
     it 'SECURITY: should not create album with mass assignment' do
