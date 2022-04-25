@@ -46,28 +46,26 @@ task :console => :print_env do
 end
 
 namespace :db do
-  task :load do
-    require_app(nil) # loads config code files only
-    require 'sequel'
+  require_app(nil) # loads config code files only
+  require 'sequel'
 
-    Sequel.extension :migration
-    @app = DFans::Api
-  end
+  Sequel.extension :migration
+  @app = DFans::Api
 
   desc 'Run migrations'
-  task :migrate => [:load, :print_env] do
+  task :migrate => :print_env do
     puts 'Migrating database to latest'
     Sequel::Migrator.run(@app.DB, 'app/db/migrations')
   end
 
   desc 'Destroy data in database; maintain tables'
-  task :delete => :load do
+  task :delete do
     @app.DB[:photos].delete
     @app.DB[:albums].delete
   end
 
   desc 'Delete dev or test database file'
-  task :drop => :load do
+  task :drop do
     if @app.environment == :production
       puts 'Cannot wipe production database!'
       return
@@ -77,6 +75,26 @@ namespace :db do
     FileUtils.rm(db_filename)
     puts "Deleted #{db_filename}"
   end
+
+  task :load_models do
+    require_app(%w[lib models])
+  end
+
+  task :reset_seeds => [:load_models] do
+    app.DB[:schema_seeds].delete if app.DB.tables.include?(:schema_seeds)
+    Credence::Account.dataset.destroy
+  end
+
+  desc 'Seeds the development database'
+  task :seed => [:load_models] do
+    require 'sequel/extensions/seed'
+    Sequel::Seed.setup(:development)
+    Sequel.extension :seed
+    Sequel::Seeder.apply(@app.DB, 'app/db/seeds')
+  end
+
+  desc 'Delete all data and reseed'
+  task reseed: [:reset_seeds, :seed]
 end
 
 namespace :newkey do
