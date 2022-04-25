@@ -6,7 +6,8 @@ Sequel.migration do
   change do
     create_table(:albums) do
       uuid :id, primary_key: true
-
+      foreign_key :owner_id, :accounts
+      
       String :name, null: false
       String :description_secure
       # String [:tags]
