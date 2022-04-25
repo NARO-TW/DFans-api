@@ -6,6 +6,8 @@ require 'sequel'
 module DFans
   # Models an album
   class Album < Sequel::Model
+    many_to_one :owner, class: :'DFans::Account'
+
     one_to_many :photos
     plugin :association_dependencies, photos: :destroy
 
