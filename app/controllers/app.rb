@@ -70,12 +70,16 @@ module DFans
                 routing.halt 404, message: 'Could not find photos'
               end
               
-              # POST api/v1/albums/[album_id]/photos  updated 220417
+              # POST api/v1/albums/[album_id]/photos  updated 220422
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                album = Album.first(id: album_id)
-                new_pho = album.add_photo(new_data)
-                raise 'Could not save photo' unless new_pho
+                # Reuse the service Object as P.17. 10-User Account. 220427
+                new_pho = CreatePhotoForAlbum.call(
+                  album_id: album_id, photo_id: new_data
+                )
+                # album = Album.first(id: album_id)
+                # new_pho = album.add_photo(new_data)
+                # raise 'Could not save photo' unless new_pho
 
                 response.status = 201
                 response['Location'] = "#{@pho_route}/#{new_pho.id}"

@@ -49,3 +49,6 @@ gem 'rerun'
 
 # Quality
 gem 'rubocop'
+
+# Mistake Avoiding 
+gem 'parser', '2.4.0.2'
