@@ -6,7 +6,7 @@ Sequel.seed(:development) do
     create_accounts
     create_owned_albums
     create_photos
-#    add_collaborators
+#    add_participant
   end
 end
 
@@ -16,7 +16,7 @@ ACCOUNTS_INFO = YAML.load_file("#{DIR}/accounts_seed.yml")
 OWNER_INFO = YAML.load_file("#{DIR}/owners_albums.yml")
 ALBUM_INFO = YAML.load_file("#{DIR}/album_seeds.yml")
 PHOTO_INFO = YAML.load_file("#{DIR}/photo_seeds.yml")
-#CONTRIB_INFO = YAML.load_file("#{DIR}/albums_collaborators.yml")
+#PARTI_INFO = YAML.load_file("#{DIR}/albums_participants.yml")
 
 def create_accounts
   ACCOUNTS_INFO.each do |account_info|
@@ -29,9 +29,7 @@ def create_owned_albums
     account = DFans::Account.first(username: owner['username'])
     owner['album_name'].each do |album_name|
       album_data = ALBUM_INFO.find { |album| album['name'] == album_name }
-#      DFans::CreateAlbumForOwner.call(
-#        owner_id: account.id, album_data: album_data
-#      )
+      DFans::CreateAlbumForOwner.call(owner_id: account.id, album_data: album_data)
     end
   end
 end
@@ -42,18 +40,16 @@ def create_photos
   loop do
     pho_info = pho_info_each.next
     album = albums_cycle.next
-#    DFans::CreatePhotoForAlbum.call(
-#      album_id: album.id, photo_data: pho_info
-#    )
+    DFans::CreatePhotoForAlbum.call(album_id: album.id, photo_data: pho_info)
   end
 end
 
-#def add_collaborators
-#  contrib_info = CONTRIB_INFO
-#  contrib_info.each do |contrib|
-#    album = DFans::Album.first(name: contrib['album_name'])
-#    contrib['collaborator_email'].each do |email|
-#      DFans::AddCollaboratorToAlbum.call(
+#def add_participants
+#  parti_info = PARTI_INFO
+#  parti_info.each do |parti|
+#    album = DFans::Album.first(name: parti['album_name'])
+#    parti['participant_email'].each do |email|
+#      DFans::AddParticipantToAlbum.call(
 #        email:, album_id: album.id
 #      )
 #    end
