@@ -36,8 +36,8 @@ module DFans
             new_account = Account.new(new_data)
             raise('Could not save account') unless new_account.save
 
-            response.status = 201
-            response['Location'] = "#{@account_route}/#{new_account.id}"
+            response.status = 201 # result created
+            response['Location'] = "#{@account_route}/#{new_account.id}" # Create Header 'Location' for account url
             { message: 'Account created', data: new_account }.to_json
           rescue Sequel::MassAssignmentRestriction
             Api.logger.warn "MASS-ASSIGNMENT:: #{new_data.keys}"
