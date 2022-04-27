@@ -21,6 +21,7 @@ gem 'nokogiri', '~> 1.6', '>= 1.6.8'
 # Security
 gem 'bundler-audit'
 gem 'rbnacl', '~>7'
+#gem 'rbnacl-libsodium' # can be skipped
 
 # gem install sqlite3 -v 1.3.6
 # Database
@@ -51,4 +52,4 @@ gem 'rerun'
 gem 'rubocop'
 
 # Mistake Avoiding 
-gem 'parser', '2.4.0.2'
+gem 'parser', '~> 3.1'
