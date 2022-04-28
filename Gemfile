@@ -10,13 +10,12 @@ gem 'roda', '~>3.54'
 # Configuration
 gem 'figaro', '~>1'
 
-# gem 'rake'
+gem 'rake'
 gem 'rack', '>= 2.0.6'
 
 # Edit by Leo, this can be modified
 gem 'nokogiri', '~> 1.6', '>= 1.6.8'
 
-# Edit by Leo, this can be modified
 
 # Security
 gem 'bundler-audit'
@@ -28,7 +27,7 @@ gem 'rbnacl', '~>7'
 gem 'hirb'
 gem 'sequel', '~>5'
 group :development, :test do
-  gem 'sqlite3', '~>1.3.6'
+  gem 'sqlite3'#, '~>1.3.6'
 end
 
 # Performance

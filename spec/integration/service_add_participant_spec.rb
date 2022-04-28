@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative '../spec_helper'
-require 'rbnacl'
-require 'sodium'
+# require 'rbnacl'
+# require 'sodium'
 
 describe 'Test AddParticipantToAlbum service' do
   before do
