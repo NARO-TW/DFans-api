@@ -8,14 +8,15 @@ module DFans
   # Models a registered account
   class Account < Sequel::Model
     one_to_many :owned_albums, class: :'DFans::Album', key: :owner_id
-    #many_to_many :collaborations,
-    #             class: :'DFans::Album',
-    #             join_table: :accounts_albums,
-    #             left_key: :collaborator_id, right_key: :album_id
+
+    many_to_many :participations,
+                 class: :'DFans::Album',
+                 join_table: :accounts_albums,
+                 left_key: :participant_id, right_key: :album_id
 
     plugin :association_dependencies,
-           owned_albums: :destroy
-    #       collaborations: :nullify
+           owned_albums: :destroy,
+           participations: :nullify
 
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password
@@ -23,7 +24,7 @@ module DFans
     plugin :timestamps, update_on_create: true
 
     def albums
-      owned_albums + collaborations
+      owned_albums + participations
     end
 
     def password=(new_password)

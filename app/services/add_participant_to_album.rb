@@ -14,7 +14,7 @@ module DFans
       # Check the participant is not the album owner. If 'True', raise the exception "OwnerNotParticipantError".
       raise(OwnerNotParticipantError) if album.owner.id == participant.id
 
-      album.add_collaborator(participant)
+      album.add_participant(participant)
     end
   end
 end

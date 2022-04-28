@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/HashSyntax, Style/SymbolArray, Metrics/BlockLength
 require 'rake/testtask'
 require './require_app'
 
@@ -10,15 +11,15 @@ task :api_spec do
   sh 'ruby spec/api_spec.rb'
 end
 
-desc 'Tests Photos specs only'
-task :photos_spec do
-  sh 'ruby spec/photos_spec.rb'
-end
-
 desc 'Test all the specs'
 Rake::TestTask.new(:spec) do |t|
   t.pattern = 'spec/**/*_spec.rb'
   t.warning = false
+end
+
+desc 'Rerun tests on live code changes'
+task :respec do
+  sh 'rerun -c rake spec'
 end
 
 desc 'Runs rubocop on tested code'
@@ -50,23 +51,23 @@ namespace :db do
   require 'sequel'
 
   Sequel.extension :migration
-  @app = DFans::Api
+  app = DFans::Api
 
   desc 'Run migrations'
   task :migrate => :print_env do
     puts 'Migrating database to latest'
-    Sequel::Migrator.run(@app.DB, 'app/db/migrations')
+    Sequel::Migrator.run(app.DB, 'app/db/migrations')
   end
 
-  desc 'Destroy data in database; maintain tables'
+  desc 'Delete database'
   task :delete do
-    @app.DB[:photos].delete
-    @app.DB[:albums].delete
+    app.DB[:documents].delete
+    app.DB[:projects].delete
   end
 
   desc 'Delete dev or test database file'
   task :drop do
-    if @app.environment == :production
+    if app.environment == :production
       puts 'Cannot wipe production database!'
       return
     end
@@ -77,12 +78,12 @@ namespace :db do
   end
 
   task :load_models do
-    require_app(%w[lib models])
+    require_app(%w[lib models services])
   end
 
   task :reset_seeds => [:load_models] do
     app.DB[:schema_seeds].delete if app.DB.tables.include?(:schema_seeds)
-    Credence::Account.dataset.destroy
+    DFans::Account.dataset.destroy
   end
 
   desc 'Seeds the development database'
@@ -90,7 +91,7 @@ namespace :db do
     require 'sequel/extensions/seed'
     Sequel::Seed.setup(:development)
     Sequel.extension :seed
-    Sequel::Seeder.apply(@app.DB, 'app/db/seeds')
+    Sequel::Seeder.apply(app.DB, 'app/db/seeds')
   end
 
   desc 'Delete all data and reseed'
@@ -98,10 +99,10 @@ namespace :db do
 end
 
 namespace :newkey do
-  desc 'Create sample cryptographic key for database' 
+  desc 'Create sample cryptographic key for database'
   task :db do
     require_app('lib')
-    puts "DB_KEY: #{SecureDB.generate_key}" 
+    puts "DB_KEY: #{SecureDB.generate_key}"
   end
 end
-# rubocop:enable Style/HashSyntax, Style/SymbolArray
+# rubocop:enable Style/HashSyntax, Style/SymbolArray, Metrics/BlockLength
