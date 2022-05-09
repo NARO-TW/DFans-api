@@ -40,9 +40,10 @@ module DFans
       JSON(
         {
           type: 'account',
-          id: id,
-          username: username,
-          email: email
+          attributes: {
+            username:,
+            email:
+          }
         }, options
       )
     end

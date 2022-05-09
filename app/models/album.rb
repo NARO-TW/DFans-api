@@ -36,14 +36,12 @@ module DFans
     def to_json(options = {})
       JSON(
         {
-          data: {
-            type: 'album',
-            attributes: {
-              id: id,
-              name: name,
-              description: description
-              # tags: tags
-            }
+          type: 'album',
+          attributes: {
+            id:,
+            name:,
+            description:
+            # tags: tags
           }
         }, options
       )

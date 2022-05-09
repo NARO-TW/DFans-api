@@ -4,7 +4,7 @@ require 'json'
 require 'sequel'
 
 module DFans
-  # Models a secret document
+  # Models a secret photo
   class Photo < Sequel::Model
     many_to_one :album
 
@@ -25,17 +25,14 @@ module DFans
     def to_json(options = {})
       JSON(
         {
-          data: {
-            type: 'photo',
-            attributes: {
-              id: id,
-              filename: filename,
-              relative_path: relative_path,
-              description: description
-            }
+          type: 'photo',
+          attributes: {
+            id:,
+            filename:,
+            description:
           },
-          included: {
-            album: album
+          include: {
+            album:
           }
         }, options
       )
