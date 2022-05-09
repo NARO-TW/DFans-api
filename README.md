@@ -11,7 +11,7 @@ All routes return Json
 - POST `api/v1/accounts`: Create a new account
 - GET  `api/v1/albums/[album_id]/photos/[photo_id]`: Get a photo in an album
 - GET  `api/v1/albums/[album_id]/photos`: Get the list of photos for an album
-- POST `api/v1/albums/[album_id]/photos`: Upload photos for an album
+- POST `api/v1/albums/[album_id]/photos`: Upload photos to an album
 - GET  `api/v1/albums/[album_id]`: Get information about an album
 - GET  `api/v1/albums`: Get list of all albums
 - POST `api/v1/albums`: Create a new album
