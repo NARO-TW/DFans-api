@@ -1,7 +1,5 @@
 ---
-- filename: 'dog'
-  relative_path: '/'
+- filename: 'dog-A'
   description: 'cute dog'
-- filename: 'cat'
-  relative_path: ''
+- filename: 'cat-B'
   description: 'lovely cat'

@@ -10,7 +10,7 @@ Sequel.migration do
       
       String :name, null: false
       String :description_secure
-      # String [:tags]
+      # String :tags
 
       DateTime :created_at
       DateTime :updated_at
