@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby File.read('.ruby-version').strip 
+ruby File.read('.ruby-version').strip
 # tell HEROKU what ruby version we use
 
 # Web API
 gem 'json'
-gem 'puma', '~>5.6'  #'~>5'
-gem 'roda', '~>3.54' #'~>3'
+gem 'puma', '~>5.6'  # '~>5'
+gem 'roda', '~>3.54' # '~>3'
 
 # Configuration
 gem 'figaro', '~>1'
@@ -35,8 +35,9 @@ gem 'pry' # necessary for rake console
 
 # Development
 group :development do
-  gem 'pry'
   gem 'rerun'
+
+  # Quality
   gem 'rubocop'
   gem 'rubocop-performance'
 end
@@ -44,11 +45,8 @@ end
 group :development, :test do
   gem 'rack-test'
   gem 'sequel-seed'
-  gem 'sqlite3','~>1.3.13' # Lower the edition for my wins env
-endgit
+  gem 'sqlite3', '~>1.3.13' # Lower the edition for my wins env
+end
 
-# Mistake Avoiding 
+# Mistake Avoiding
 gem 'parser', '~> 3.1'
-
-# Quality
-gem 'rubocop'
