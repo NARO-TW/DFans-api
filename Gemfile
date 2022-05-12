@@ -4,12 +4,15 @@ source 'https://rubygems.org'
 
 # Web API
 gem 'json'
-gem 'puma', '~>5'
-gem 'roda', '~>3'
+gem 'puma', '~>5.6'  #'~>5'
+gem 'roda', '~>3.54' #'~>3'
 
 # Configuration
 gem 'figaro', '~>1'
 gem 'rake', '~>13'
+
+# Parse HTML and XML in Ruby
+# gem 'nokogiri', '~> 1.6', '>= 1.6.8'
 
 # Security
 gem 'bundler-audit'
@@ -36,5 +39,11 @@ end
 group :development, :test do
   gem 'rack-test'
   gem 'sequel-seed'
-  gem 'sqlite3'
+  gem 'sqlite3','~>1.3.13' # Lower the edition for my wins env
 end
+
+# Mistake Avoiding 
+gem 'parser', '~> 3.1'
+
+# Quality
+gem 'rubocop'
