@@ -44,14 +44,14 @@ def create_photos
   end
 end
 
-#def add_participants
-#  parti_info = PARTI_INFO
-#  parti_info.each do |parti|
-#    album = DFans::Album.first(name: parti['album_name'])
-#    parti['participant_email'].each do |email|
-#      DFans::AddParticipantToAlbum.call(
-#        email:, album_id: album.id
-#      )
-#    end
-#  end
-#end
+def add_participants
+ parti_info = PARTI_INFO
+ parti_info.each do |parti|
+   album = DFans::Album.first(name: parti['album_name'])
+   parti['participant_email'].each do |email|
+     DFans::AddParticipantToAlbum.call(
+       email:, album_id: album.id
+     )
+   end
+ end
+end

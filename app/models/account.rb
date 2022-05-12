@@ -8,7 +8,6 @@ module DFans
   # Models a registered account
   class Account < Sequel::Model
     one_to_many :owned_albums, class: :'DFans::Album', key: :owner_id
-
     many_to_many :participations,
                  class: :'DFans::Album',
                  join_table: :accounts_albums,
