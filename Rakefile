@@ -38,7 +38,7 @@ task :release? => [:spec, :style, :audit] do
 end
 
 task :print_env do
-  puts "Environment: #{ENV['RACK_ENV'] || 'development'}"
+  puts "Environment: #{ENV.fetch('RACK_ENV', nil) || 'development'}"
 end
 
 desc 'Run application console (pry)'
@@ -100,7 +100,7 @@ end
 namespace :newkey do
   desc 'Create sample cryptographic key for database'
   task :db do
-    #require_app('lib')
+    # require_app('lib')
     puts "DB_KEY: #{SecureDB.generate_key}"
   end
 end
