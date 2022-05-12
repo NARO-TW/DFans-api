@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+ruby File.read('.ruby-version').strip 
+# tell HEROKU what ruby version we use
 
 # Web API
 gem 'json'
@@ -28,6 +30,9 @@ group :test do
   gem 'minitest-rg'
 end
 
+# Debugging
+gem 'pry' # necessary for rake console
+
 # Development
 group :development do
   gem 'pry'
@@ -40,7 +45,7 @@ group :development, :test do
   gem 'rack-test'
   gem 'sequel-seed'
   gem 'sqlite3','~>1.3.13' # Lower the edition for my wins env
-end
+endgit
 
 # Mistake Avoiding 
 gem 'parser', '~> 3.1'
