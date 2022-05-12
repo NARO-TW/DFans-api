@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DFans
   # Service object to create a new Album for an owner
   class CreateAlbumForOwner
