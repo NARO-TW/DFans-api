@@ -4,13 +4,24 @@ require 'json'
 require 'sequel'
 
 module DFans
-  # Models a secret photo
-  class Photo < Sequel::Model
-    many_to_one :album
+  # Models an album
+  class Album < Sequel::Model
+    many_to_one :owner, class: :'DFans::Account'
+
+    many_to_many :participants,
+                 class: :'DFans::Account',
+                 join_table: :accounts_albums,
+                 left_key: :album_id, right_key: :participant_id
+
+    one_to_many :photos
+
+    plugin :association_dependencies,
+           photos: :destroy,
+           participants: :nullify
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :filename, :relative_path, :description
+    set_allowed_columns :name, :description
 
     # Secure getters and setters
     def description
@@ -25,14 +36,12 @@ module DFans
     def to_json(options = {})
       JSON(
         {
-          type: 'photo',
+          type: 'album',
           attributes: {
             id:,
-            filename:,
+            name:,
             description:
-          },
-          include: {
-            album:
+            # tags: tags
           }
         }, options
       )

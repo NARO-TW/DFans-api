@@ -6,31 +6,64 @@ API to store,retrieve, and share confidential photos to unspecific users.
 
 All routes return Json
 
-- GET `/`: Root route shows if Web API is running
-- GET `api/v1/photos/`: returns all confiugration IDs
-- GET `api/v1/photos/[ID]`: returns details about a single photo with given ID
-- POST `api/v1/photos/`: upload a new photo
+- GET  `/`: Root route shows if Web API is running
+- GET  `api/v1/accounts/[username]`: Get account details
+- POST `api/v1/accounts`: Create a new account
+- GET  `api/v1/albums/[album_id]/photos/[photo_id]`: Get a photo in an album
+- GET  `api/v1/albums/[album_id]/photos`: Get the list of photos for an album
+- POST `api/v1/albums/[album_id]/photos`: Upload photos to an album
+- GET  `api/v1/albums/[album_id]`: Get information about an album
+- GET  `api/v1/albums`: Get list of all albums
+- POST `api/v1/albums`: Create a new album
 
 ## Install
 
-Install this API by cloning the *relevant branch* and installing required gems from `Gemfile.lock`:
+Install this API by cloning the *relevant branch* and use bundler to install specified gems from `Gemfile.lock`:
 
 ```shell
 bundle install
 ```
 
-## Test
-
-Run the test script:
+Setup development database once:
 
 ```shell
-bundle exec ruby spec/api_spec.rb
+rake db:migrate
+```
+
+## Test
+
+Setup test database once:
+
+```shell
+RACK_ENV=test rake db:migrate
+```
+
+Run the test specification script in `Rakefile`:
+
+```shell
+rake spec
+```
+
+## Develop/Debug
+
+Add fake data to the development database to work on this project:
+
+```shell
+rake db:seed
 ```
 
 ## Execute
 
-Run this API using:
+Launch the API using:
 
 ```shell
-rackup
+rake run:dev
+```
+
+## Release check
+
+Before submitting pull requests, please check if specs, style, and dependency audits pass (will need to be online to update dependency database):
+
+```shell
+rake release?
 ```
