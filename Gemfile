@@ -2,19 +2,15 @@
 
 source 'https://rubygems.org'
 ruby File.read('.ruby-version').strip
-# tell HEROKU what ruby version we use
 
 # Web API
 gem 'json'
-gem 'puma', '~>5.6'  # '~>5'
-gem 'roda', '~>3.54' # '~>3'
+gem 'puma', '~>5'
+gem 'roda', '~>3'
 
 # Configuration
 gem 'figaro', '~>1'
 gem 'rake', '~>13'
-
-# Parse HTML and XML in Ruby
-# gem 'nokogiri', '~> 1.6', '>= 1.6.8'
 
 # Security
 gem 'bundler-audit'
@@ -23,6 +19,10 @@ gem 'rbnacl', '~>7'
 # Database
 gem 'hirb', '~>0'
 gem 'sequel', '~>5'
+
+group :production do
+  gem 'pg'
+end
 
 # Testing
 group :test do
@@ -45,8 +45,5 @@ end
 group :development, :test do
   gem 'rack-test'
   gem 'sequel-seed'
-  gem 'sqlite3', '~>1.3.13' # Lower the edition for my wins env
+  gem 'sqlite3'
 end
-
-# Mistake Avoiding
-gem 'parser', '~> 3.1'
