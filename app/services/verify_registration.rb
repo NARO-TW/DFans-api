@@ -2,7 +2,7 @@
 
 require 'http'
 
-module Credence
+module Dfans
   ## Send email verfification email
   # params:
   #   - registration: hash with keys :username :email :verification_url
