@@ -14,7 +14,7 @@ module DFans
           @pho_route = "#{@api_root}/albums/#{album_id}/photos"
           # GET api/v1/albums/[album_id]/photos/[photo_id]
           routing.get String do |photo_id|
-            pho = Photo.where(album_id:, id: photo_id).first
+            pho = Photo.where(album_id: album_id, id: photo_id).first
             pho ? pho.to_json : raise('Photo not found')
           rescue StandardError => e
             routing.halt 404, { message: e.message }.to_json
@@ -31,7 +31,7 @@ module DFans
             new_data = JSON.parse(routing.body.read)
             # Reuse the service Object as in the handout "10-User Account" P.17.
             new_pho = CreatePhotoForAlbum.call(
-              album_id:, photo_data: new_data
+              album_id: album_id, photo_data: new_data
             )
             response.status = 201
             response['Location'] = "#{@pho_route}/#{new_pho.id}"

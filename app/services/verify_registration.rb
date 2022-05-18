@@ -2,7 +2,7 @@
 
 require 'http'
 
-module Dfans
+module DFans
   ## Send email verfification email
   # params:
   #   - registration: hash with keys :username :email :verification_url
@@ -15,10 +15,18 @@ module Dfans
       @registration = registration
     end
 
-    def from_email = ENV.fetch('SENDGRID_FROM_EMAIL')
-    def mail_api_key = ENV.fetch('SENDGRID_API_KEY')
-    def mail_url = 'https://api.sendgrid.com/v3/mail/send'
+    def from_email 
+      ENV.fetch('SENDGRID_FROM_EMAIL')
+    end
 
+    def mail_api_key
+      ENV.fetch('SENDGRID_API_KEY')
+    end
+
+    def mail_url 
+      'https://api.sendgrid.com/v3/mail/send'
+    end
+    
     def call
       raise(InvalidRegistration, 'Username exists') unless username_available?
       raise(InvalidRegistration, 'Email already used') unless email_available?

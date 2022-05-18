@@ -36,14 +36,18 @@ class AuthToken
   end
 
   # Check if token is not expired
-  def fresh? = !expired?
-
+  def fresh?
+    !expired?
+  end
+  
   # Extract data from token
   def payload
     expired? ? raise(ExpiredTokenError) : @payload
   end
 
-  def to_s = @token
+  def to_s
+    @token
+  end
 
   # Create a token from a Hash payload
   def self.create(payload, expiration = ONE_WEEK)

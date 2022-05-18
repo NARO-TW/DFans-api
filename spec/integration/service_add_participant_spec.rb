@@ -14,7 +14,7 @@ describe 'Test AddParticipantToAlbum service' do
     @owner = DFans::Account.all[0]
     @participant = DFans::Account.all[1]
     @album = DFans::CreateAlbumForOwner.call(
-      owner_id: @owner.id, album_data:
+      owner_id: @owner.id, album_data: album_data
     )
   end
 

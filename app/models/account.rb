@@ -40,8 +40,8 @@ module DFans
         {
           type: 'account',
           attributes: {
-            username:,
-            email:
+            username: username,
+            email: email
           }
         }, options
       )

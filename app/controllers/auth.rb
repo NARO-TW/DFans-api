@@ -3,7 +3,7 @@
 require 'roda'
 require_relative './app'
 
-module Dfans
+module DFans
   # Web controller for Credence API
   class Api < Roda
     route('auth') do |routing|

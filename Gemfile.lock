@@ -67,6 +67,7 @@ GEM
     unicode-display_width (2.1.0)
 
 PLATFORMS
+  universal-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -90,8 +91,5 @@ DEPENDENCIES
   sequel-seed
   sqlite3
 
-RUBY VERSION
-   ruby 3.1.1p18
-
 BUNDLED WITH
-   2.3.12
+   2.3.8
