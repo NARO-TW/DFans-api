@@ -34,6 +34,7 @@ module DFans
 
       # Load crypto keys
       SecureDB.setup(ENV.delete('DB_KEY'))
+      AuthToken.setup(ENV.fetch('MSG_KEY')) # Load crypto key
     end
     # rubocop:enable Lint/ConstantDefinitionInBlock
 
