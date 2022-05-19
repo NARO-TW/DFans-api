@@ -10,7 +10,7 @@ describe 'Test Album Handling' do
   end
 
   describe 'Getting albums' do
-    describe 'Getting list of projects' do
+    describe 'Getting list of albums' do
       before do
         @account_data = DATA[:accounts][0]
         account = DFans::Account.create(@account_data)
