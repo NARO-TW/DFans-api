@@ -4,7 +4,7 @@ require 'roda'
 require 'figaro'
 require 'logger'
 require 'sequel'
-require './app/lib/secure_db'
+require_app('lib')
 
 module DFans
   # Configuration for the API
@@ -19,11 +19,9 @@ module DFans
         path: File.expand_path('config/secrets.yml')
       )
       Figaro.load
-      # Make the environment variables accessible to other classes
       def self.config = Figaro.env
 
       # Database Setup
-      # Connect and make the database accessible to other classes
       db_url = ENV.delete('DATABASE_URL')
       DB = Sequel.connect("#{db_url}?encoding=utf8")
       def self.DB = DB # rubocop:disable Naming/MethodName
@@ -34,6 +32,7 @@ module DFans
 
       # Load crypto keys
       SecureDB.setup(ENV.delete('DB_KEY'))
+      AuthToken.setup(ENV.fetch('MSG_KEY')) # Load crypto key
     end
     # rubocop:enable Lint/ConstantDefinitionInBlock
 

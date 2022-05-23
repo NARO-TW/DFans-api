@@ -10,15 +10,36 @@ describe 'Test Album Handling' do
   end
 
   describe 'Getting albums' do
-    it 'HAPPY: should be able to get list of all albums' do
-      DFans::Album.create(DATA[:albums][0])
-      DFans::Album.create(DATA[:albums][1])
+    describe 'Getting list of albums' do
+      before do
+        @account_data = DATA[:accounts][0]
+        account = DFans::Account.create(@account_data)
+        account.add_owned_album(DATA[:albums][0])
+        account.add_owned_album(DATA[:albums][1])
+      end
 
-      get 'api/v1/albums'
-      _(last_response.status).must_equal 200
+      it 'HAPPY: should get list for authorized account' do
+        auth = DFans::AuthenticateAccount.call(
+          username: @account_data['username'],
+          password: @account_data['password']
+        )
 
-      result = JSON.parse last_response.body
-      _(result['data'].count).must_equal 2
+        header 'AUTHORIZATION', "Bearer #{auth[:attributes][:auth_token]}"
+        get 'api/v1/albums'
+        _(last_response.status).must_equal 200
+
+        result = JSON.parse last_response.body
+        _(result['data'].count).must_equal 2
+      end
+
+      it 'BAD: should not process for unauthorized account' do
+        header 'AUTHORIZATION', 'Bearer bad_token'
+        get 'api/v1/albums'
+        _(last_response.status).must_equal 403
+
+        result = JSON.parse last_response.body
+        _(result['data']).must_be_nil
+      end
     end
 
     it 'HAPPY: should be able to get details of a single album' do

@@ -27,12 +27,12 @@ module DFans
         {
           type: 'photo',
           attributes: {
-            id:,
-            filename:,
-            description:
+            id: id,
+            filename: filename,
+            description: description
           },
           include: {
-            album:
+            album: album
           }
         }, options
       )

@@ -5,11 +5,13 @@ module DFans
   class AddParticipantToAlbum
     # Error for owner cannot be collaborator
     class OwnerNotParticipantError < StandardError
-      def message = 'Owner cannot be participant of album'
+      def message
+        'Owner cannot be participant of album'
+      end
     end
 
     def self.call(email:, album_id:)
-      participant = Account.first(email:) # Find the account with  the email provided
+      participant = Account.first(email:email) # Find the account with  the email provided
       album = Album.first(id: album_id) # Find the album with  the album_id
       # Check the participant is not the album owner. If 'True', raise the exception "OwnerNotParticipantError".
       raise(OwnerNotParticipantError) if album.owner.id == participant.id
