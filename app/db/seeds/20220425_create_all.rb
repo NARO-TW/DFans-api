@@ -40,7 +40,9 @@ def create_photos
   loop do
     pho_info = pho_info_each.next
     album = albums_cycle.next
-    DFans::CreatePhotoForAlbum.call(album_id: album.id, photo_data: pho_info)
+    DFans::CreatePhoto.call(
+      account: album.owner, album: album, photo_data: pho_info
+    )
   end
 end
 
@@ -49,9 +51,9 @@ def add_participants
  parti_info.each do |parti|
    album = DFans::Album.first(name: parti['album_name'])
    parti['participant_email'].each do |email|
-     DFans::AddParticipantToAlbum.call(
-       email:, album_id: album.id
-     )
-   end
+    account = album.owner
+    DFans::AddParticipant.call(
+      account: account, album: album, parti_email: email)
+    end
  end
 end

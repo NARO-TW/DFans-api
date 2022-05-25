@@ -33,19 +33,29 @@ module DFans
     end
 
     # rubocop:disable Metrics/MethodLength
-    def to_json(options = {})
-      JSON(
-        {
-          type: 'album',
-          attributes: {
-            id: id,
-            name: name,
-            description: description
-            # tags: tags
-          }
-        }, options
+    def to_h
+      {
+        type: 'album',
+        attributes: {
+          id:id,
+          name:name,
+          description:description
+        }
+      }
+    end
+
+    def full_details
+      to_h.merge(
+        relationships: {
+          owner:owner,
+          participants:participants,
+          photos:photos
+        }
       )
     end
-    # rubocop:enable Metrics/MethodLength
+
+    def to_json(options = {})
+      JSON(to_h, options)
+    end
   end
 end
