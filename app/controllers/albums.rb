@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'roda'
 require_relative './app'
 
+# rubocop:disable Metrics/BlockLength
 module DFans
   # Web controller for DFans API
   class Api < Roda

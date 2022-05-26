@@ -76,7 +76,7 @@ describe 'Test Participant Handling' do
       _(last_response.status).must_equal 403
     end
 
-    it 'BAD AUTHORIZATION: should not remove invalid participant' do
+    it 'BAD AUTHORIZATION: should not remove invalid participants' do
       req_data = { email: @another_account.email }
 
       header 'AUTHORIZATION', auth_header(@account_data)
