@@ -17,7 +17,7 @@ module DFans
           @full_scope
         else
           @full_scope.select do |alb|
-            includes_participator?(alb, @current_account)
+            includes_participant?(alb, @current_account)
           end
         end
       end
@@ -28,8 +28,8 @@ module DFans
         account.owned_albums + account.participations
       end
 
-      def includes_participator?(album, account)
-        album.participators.include? account
+      def includes_participant?(album, account)
+        album.participants.include? account
       end
     end
   end

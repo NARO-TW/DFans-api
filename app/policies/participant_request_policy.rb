@@ -12,17 +12,17 @@ module DFans
     end
   
     def can_invite?
-      @requestor.can_add_participators? && @target.can_participator?
+      @requestor.can_add_participants? && @target.can_participant?
     end
   
     def can_remove?
-      @requestor.can_remove_participators? && target_is_participator?
+      @requestor.can_remove_participants? && target_is_participant?
     end
   
     private
   
-    def target_is_participator?
-      @album.participators.include?(@target_account)
+    def target_is_participant?
+      @album.participants.include?(@target_account)
     end
   end
 end
