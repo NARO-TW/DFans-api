@@ -49,7 +49,6 @@ describe 'Test Album Handling' do
       header 'AUTHORIZATION', auth_header(@account_data)
       get "/api/v1/albums/#{album.id}"
       _(last_response.status).must_equal 200
-
       result = JSON.parse(last_response.body)['data']
       _(result['attributes']['id']).must_equal album.id
       _(result['attributes']['name']).must_equal album.name
@@ -93,7 +92,6 @@ describe 'Test Album Handling' do
     end
 
     it 'HAPPY: should be able to create new albums' do
-      post 'api/v1/albums', @pho_data.to_json, @req_header
       header 'AUTHORIZATION', auth_header(@account_data)
       post 'api/v1/albums', @album_data.to_json
 
@@ -105,6 +103,7 @@ describe 'Test Album Handling' do
 
       _(created['id']).must_equal pho.id
       _(created['name']).must_equal @pho_data['name']
+      # _(created['description']).must_equal @pho_data['description']
     end
 
     it 'SAD: should not create new album without authorization' do

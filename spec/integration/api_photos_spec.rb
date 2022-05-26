@@ -55,7 +55,6 @@ describe 'Test Photo Handling' do
 
     header 'AUTHORIZATION', auth_header(@wrong_account_data)
     get "/api/v1/photos/#{pho.id}"
-
     result = JSON.parse last_response.body
 
     _(last_response.status).must_equal 403
