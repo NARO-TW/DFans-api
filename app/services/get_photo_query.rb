@@ -18,10 +18,10 @@ module DFans
     end
 
     # Photo for given requestor account
-    def self.call(requestor:, photo:)
+    def self.call(auth:, photo:)
       raise NotFoundError unless photo
 
-      policy = PhotoPolicy.new(requestor, photo)
+      policy = PhotoPolicy.new(auth[:account], auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
       photo

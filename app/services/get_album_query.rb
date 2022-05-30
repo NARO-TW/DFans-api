@@ -17,10 +17,10 @@ module DFans
       end
     end
 
-    def self.call(account:, album:)
+    def self.call(auth:, album:)
       raise NotFoundError unless album
 
-      policy = AlbumPolicy.new(account, album)
+      policy = AlbumPolicy.new(auth[:account], album, auth[:scope])
       raise ForbiddenError unless policy.can_view?
 
       album.full_details.merge(policies: policy.summary)

@@ -10,9 +10,11 @@ module DFans
       end
     end
 
-    def self.call(account:, album:, parti_email:)
+    def self.call(auth:, album:, parti_email:)
       invitee = Account.first(email: parti_email)
-      policy = ParticipationRequestPolicy.new(album, account, invitee)
+      policy = ParticipationRequestPolicy.new(
+        album, auth[:account], invitee, auth[:scope]
+      )
       raise ForbiddenError unless policy.can_invite?
 
       album.add_participant(invitee)
