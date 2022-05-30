@@ -14,6 +14,16 @@ def wipe_database
   DFans::Account.map(&:destroy)
 end
 
+def auth_header(account_data)
+  auth = DFans::AuthenticateAccount.call(
+    username: account_data['username'],
+    password: account_data['password']
+  )
+
+  "Bearer #{auth[:attributes][:auth_token]}"
+end
+
+
 DATA = {
   accounts: YAML.load(File.read('app/db/seeds/accounts_seed.yml')),
   photos: YAML.load(File.read('app/db/seeds/photo_seeds.yml')),

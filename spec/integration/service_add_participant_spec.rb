@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 # require 'rbnacl'
 # require 'sodium'
 
-describe 'Test AddParticipantToAlbum service' do
+describe 'Test AddParticipant service' do
   before do
     wipe_database
     DATA[:accounts].each do |account_data|
@@ -19,9 +19,10 @@ describe 'Test AddParticipantToAlbum service' do
   end
 
   it 'HAPPY: should be able to add a participant to a album' do
-    DFans::AddParticipantToAlbum.call(
-      email: @participant.email,
-      album_id: @album.id
+    DFans::AddParticipant.call(
+      account: @owner,
+      album: @album,
+      parti_email: @participant.email
     )
     _(@participant.albums.count).must_equal 1
     _(@participant.albums.first).must_equal @album
@@ -29,10 +30,11 @@ describe 'Test AddParticipantToAlbum service' do
 
   it 'BAD: should not add owner as a participant' do
     _(proc {
-      DFans::AddParticipantToAlbum.call(
-        email: @owner.email,
-        album_id: @album.id
+      DFans::AddParticipant.call(
+        account: @owner,
+        album: @album,
+        parti_email: @owner.email
       )
-    }).must_raise DFans::AddParticipantToAlbum::OwnerNotParticipantError
+    }).must_raise DFans::AddParticipant::ForbiddenError
   end
 end
