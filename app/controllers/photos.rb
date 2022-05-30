@@ -18,7 +18,7 @@ module DFans
 
         routing.get do
           photo = GetPhotoQuery.call(
-            requestor: @auth_account, photo: @req_photo
+            auth: @auth, photo: @req_document
           )
 
           { data: photo }.to_json
@@ -27,7 +27,7 @@ module DFans
         rescue GetPhotoQuery::NotFoundError => e
           routing.halt 404, { message: e.message }.to_json
         rescue StandardError => e
-          puts "GET DOCUMENT ERROR: #{e.inspect}"
+          Api.logger.warn "Photo Error: #{e.inspect}"
           routing.halt 500, { message: 'API server error' }.to_json
         end
       end

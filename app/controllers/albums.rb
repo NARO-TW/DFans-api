@@ -8,8 +8,7 @@ module DFans
   class Api < Roda
     # rubocop:disable Metrics/BlockLength
     route('albums') do |routing|
-      unauthorized_message = { message: 'Unauthorized Request' }.to_json
-      routing.halt(403, unauthorized_message) unless @auth_account
+      routing.halt(403, UNAUTH_MSG) unless @auth_account
 
       @album_route = "#{@api_root}/albums"
       routing.on String do |album_id|
@@ -17,8 +16,7 @@ module DFans
 
         # GET api/v1/albums/[ID]
         routing.get do
-          album = GetAlbumQuery.call(
-            account: @auth_account, album: @req_album
+          album = GetAlbumQuery.call(account: @auth_account, album: @req_album
           )
 
           { data: album }.to_json
@@ -35,7 +33,7 @@ module DFans
           # POST api/v1/albums/[album_id]/photos
           routing.post do
             new_photo = CreatePhoto.call(
-              account: @auth_account,
+              account: @auth,
               album: @req_album,
               photo_data: JSON.parse(routing.body.read)
             )
@@ -59,7 +57,7 @@ module DFans
             req_data = JSON.parse(routing.body.read)
 
             participant = AddParticipant.call(
-              account: @auth_account,
+              account: @auth,
               album: @req_album,
               collab_email: req_data['email']
             )
@@ -103,7 +101,9 @@ module DFans
         # POST api/v1/albums
         routing.post do
           new_data = JSON.parse(routing.body.read)
-          new_album = @auth_account.add_owned_album(new_data)
+          new_album = CreateProjectForOwner.call(
+            auth: @auth, album_data: new_data
+          )
 
           response.status = 201
           response['Location'] = "#{@album_route}/#{new_album.id}"
@@ -111,6 +111,10 @@ module DFans
         rescue Sequel::MassAssignmentRestriction
           Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
           routing.halt 400, { message: 'Illegal Request' }.to_json
+          
+        rescue CreateAlbumForOwner::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+
         rescue StandardError
           Api.logger.error "Unknown error: #{e.message}"
           routing.halt 500, { message: 'API server error' }.to_json
