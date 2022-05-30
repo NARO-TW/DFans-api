@@ -16,7 +16,8 @@ class PhotoPolicy
   end
   
   def can_delete?
-    account_owns_album? || account_participates_on_album?
+    account_owns_album? #|| account_participates_on_album?
+    # the participates should not able to delete the photos in that album
   end
   
   def summary
