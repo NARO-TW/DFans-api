@@ -16,8 +16,10 @@ module DFans
           response.status = 202 # Status 202 suggests the start of a process
           { message: 'Verification email sent' }.to_json
         rescue VerifyRegistration::InvalidRegistration => e
+          Api.logger.error "VerifyRegistration::InvalidRegistration: #{e.inspect}"
           routing.halt 400, { message: e.message }.to_json
-        rescue VerifyRegistration::EmailProviderError
+        rescue VerifyRegistration::EmailProviderError => e
+          Api.logger.error "Error sending email: #{e.inspect}"
           routing.halt 500, { message: 'Error sending email' }.to_json
         rescue StandardError => e
           Api.logger.error "Could not verify registration: #{e.inspect}"
