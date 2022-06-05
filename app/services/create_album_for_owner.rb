@@ -6,7 +6,7 @@ module DFans
     # Error for owner cannot be collaborator
     class ForbiddenError < StandardError
       def message
-        'You are not allowed to add more photos'
+        'You are not allowed to create albums'
       end
     end
 
