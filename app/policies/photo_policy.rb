@@ -7,7 +7,7 @@ class PhotoPolicy
     @photo = photo
     @auth_scope = auth_scope
   end
-
+  
   def can_view?
     can_read? && (account_owns_album? || account_participates_on_album?)
   end
@@ -45,6 +45,6 @@ class PhotoPolicy
   end
 
   def account_participates_on_album?
-    @photo.album.participants.include?(@album)
+    @photo.album.participants.include?(@account)
   end
 end
