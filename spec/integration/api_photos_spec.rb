@@ -61,12 +61,11 @@ describe 'Test Photo Handling' do
     _(result['attributes']).must_be_nil
   end
 
-    it 'SAD: should return error if photo does not exist' do
-      header 'AUTHORIZATION', auth_header(@account_data)
-      get '/api/v1/photos/foobar'
+  it 'SAD: should return error if photo does not exist' do
+    header 'AUTHORIZATION', auth_header(@account_data)
+    get '/api/v1/photos/foobar'
 
-      _(last_response.status).must_equal 404
-    end
+    _(last_response.status).must_equal 404
   end
 
   describe 'Creating Photos' do
