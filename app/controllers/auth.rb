@@ -39,7 +39,6 @@ module DFans
       # POST /api/v1/auth/sso
       routing.post 'sso' do
         auth_request = JsonRequestBody.parse_symbolize(request.body.read)
-
         auth_account = AuthorizeSso.new.call(auth_request[:access_token])
         { data: auth_account }.to_json
       rescue StandardError => error

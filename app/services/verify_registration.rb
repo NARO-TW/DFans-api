@@ -33,7 +33,6 @@ module DFans
     def call
       raise(InvalidRegistration, 'Username exists') unless username_available?
       raise(InvalidRegistration, 'Email already used') unless email_available?
-
       send_email_verification
     end
 
@@ -47,8 +46,8 @@ module DFans
 
     def html_email
       <<~END_EMAIL
-        <H1>Credence App Registration Received</H1>
-        <p>Please <a href=\"#{@registration[:verification_url]}\">click here</a>
+        <H1>DFans App Registration Received</H1>
+        <p>Welcome to DFans! Please <a href=\"#{@registration[:verification_url]}\">click here</a>
         to validate your email.
         You will be asked to set a password to activate your account.</p>
       END_EMAIL
@@ -60,7 +59,7 @@ module DFans
           to: [{ 'email' => @registration[:email] }]
         }],
         from: { 'email' => from_email },
-        subject: 'Credent Registration Verification',
+        subject: 'DFans Registration Verification',
         content: [
           { type: 'text/html',
             value: html_email }
