@@ -16,15 +16,23 @@ module DFans
     end
 
     # rubocop:disable Layout/EmptyLineBetweenDefs
-    def from_email() = ENV['SENDGRID_FROM_EMAIL']
-    def mail_api_key() = ENV['SENDGRID_API_KEY']
-    def mail_url() = ENV['SENDGRID_API_URL']
+    def from_email()
+      ENV['SENDGRID_FROM_EMAIL']
+    end
+
+    def mail_api_key()
+      ENV['SENDGRID_API_KEY']
+    end
+
+    def mail_url()
+      ENV['SENDGRID_API_URL']
+    end
+    
     # rubocop:enable Layout/EmptyLineBetweenDefs
 
     def call
       raise(InvalidRegistration, 'Username exists') unless username_available?
       raise(InvalidRegistration, 'Email already used') unless email_available?
-
       send_email_verification
     end
 
@@ -38,8 +46,8 @@ module DFans
 
     def html_email
       <<~END_EMAIL
-        <H1>Credence App Registration Received</H1>
-        <p>Please <a href=\"#{@registration[:verification_url]}\">click here</a>
+        <H1>DFans App Registration Received</H1>
+        <p>Welcome to DFans! Please <a href=\"#{@registration[:verification_url]}\">click here</a>
         to validate your email.
         You will be asked to set a password to activate your account.</p>
       END_EMAIL
@@ -51,7 +59,7 @@ module DFans
           to: [{ 'email' => @registration[:email] }]
         }],
         from: { 'email' => from_email },
-        subject: 'Credent Registration Verification',
+        subject: 'DFans Registration Verification',
         content: [
           { type: 'text/html',
             value: html_email }

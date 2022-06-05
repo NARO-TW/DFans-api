@@ -17,14 +17,10 @@ module DFans
       end
     end
 
-    def self.call(account:, album:, photo_data:)
-      policy = ProjectPolicy.new(account, album)
+    def self.call(auth:, album:, photo_data:)
+      policy = AlbumPolicy.new(auth[:account], album, auth[:scope])
       raise ForbiddenError unless policy.can_add_photos?
 
-      add_photo(album, photo_data)
-    end
-
-    def self.add_photo(album, photo_data)
       album.add_photo(photo_data)
     rescue Sequel::MassAssignmentRestriction
       raise IllegalRequestError

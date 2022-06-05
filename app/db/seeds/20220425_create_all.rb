@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+
+require './app/controllers/helpers.rb'
+include DFans::SecureRequestHelpers
+
+
 Sequel.seed(:development) do
   def run
     puts 'Seeding accounts, albums, photos'
@@ -29,7 +34,7 @@ def create_owned_albums
     account = DFans::Account.first(username: owner['username'])
     owner['album_name'].each do |album_name|
       album_data = ALBUM_INFO.find { |album| album['name'] == album_name }
-      DFans::CreateAlbumForOwner.call(owner_id: account.id, album_data: album_data)
+      account.add_owned_album(album_data)
     end
   end
 end
@@ -40,8 +45,12 @@ def create_photos
   loop do
     pho_info = pho_info_each.next
     album = albums_cycle.next
+
+    auth_token = AuthToken.create(album.owner)
+    auth = scoped_auth(auth_token)    
+
     DFans::CreatePhoto.call(
-      account: album.owner, album: album, photo_data: pho_info
+      auth: auth, album: album, photo_data: pho_info
     )
   end
 end
@@ -50,10 +59,14 @@ def add_participants
   parti_info = PARTI_INFO
   parti_info.each do |parti|
     album = DFans::Album.first(name: parti['album_name'])
+    auth_token = AuthToken.create(album.owner)
+    auth = scoped_auth(auth_token)
+
     parti['participant_email'].each do |email|
       account = album.owner
       DFans::AddParticipant.call(
-        account: account, album: album, parti_email: email)
+        auth: auth, album: album, parti_email: email
+      )
     end
   end
 end

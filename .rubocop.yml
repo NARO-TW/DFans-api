@@ -30,3 +30,6 @@ Style/SymbolArray:
   Exclude:
     - Rakefile
     - app/db/migrations/*.rb
+    
+Style/EndOfLine:
+  EnforcedStyle: lf

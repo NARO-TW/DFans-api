@@ -10,12 +10,13 @@ module DFans
       end
     end
 
-    def self.call(req_username:, parti_email:, album_id:)
-      account = Account.first(username: req_username)
+    def self.call(auth:, parti_email:, album_id:)
       album = Album.first(id: album_id)
       participant = Account.first(email: parti_email)
 
-      policy = ParticipationRequestPolicy.new(album, account, participant)
+      policy = ParticipationRequestPolicy.new(
+        album, auth[:account], participant, auth[:scope]
+      )
       raise ForbiddenError unless policy.can_remove?
 
       album.remove_participant(participant)

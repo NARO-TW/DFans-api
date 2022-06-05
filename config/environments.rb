@@ -19,16 +19,21 @@ module DFans
         path: File.expand_path('config/secrets.yml')
       )
       Figaro.load
-      def self.config = Figaro.env
+      def self.config
+        Figaro.env
+      end
 
       # Database Setup
       db_url = ENV.delete('DATABASE_URL')
       DB = Sequel.connect("#{db_url}?encoding=utf8")
-      def self.DB = DB # rubocop:disable Naming/MethodName
-
+      def self.DB # rubocop:disable Naming/MethodName
+        DB 
+      end
       # Logger setup
       LOGGER = Logger.new($stderr)
-      def self.logger = LOGGER
+      def self.logger
+        LOGGER
+      end
 
       # Load crypto keys
       SecureDB.setup(ENV.delete('DB_KEY'))

@@ -11,16 +11,18 @@ describe 'Test AddParticipant service' do
       DFans::Account.create(account_data)
     end
     album_data = DATA[:albums].first
+
+    @owner_data = DATA[:accounts][0]
     @owner = DFans::Account.all[0]
     @participant = DFans::Account.all[1]
-    @album = DFans::CreateAlbumForOwner.call(
-      owner_id: @owner.id, album_data: album_data
-    )
+    @album = @owner.add_owned_album(album_data)
   end
 
   it 'HAPPY: should be able to add a participant to a album' do
+    auth = authorization(@owner_data)
+
     DFans::AddParticipant.call(
-      account: @owner,
+      auth: auth,
       album: @album,
       parti_email: @participant.email
     )
@@ -29,9 +31,13 @@ describe 'Test AddParticipant service' do
   end
 
   it 'BAD: should not add owner as a participant' do
+    auth = DFans::AuthenticateAccount.call(
+      username: @owner_data['username'],
+      password: @owner_data['password']
+    )
     _(proc {
       DFans::AddParticipant.call(
-        account: @owner,
+        auth: auth,
         album: @album,
         parti_email: @owner.email
       )

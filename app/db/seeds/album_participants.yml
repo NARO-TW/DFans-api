@@ -1,8 +1,8 @@
 ---
-  - proj_name: Data Project
+  - album_name: Data album
     collaborator_email:
       - furen@nthu.edu.tw
       - galit@gmail.com
-  - proj_name: Config Project 雷門
+  - album_name: Config album 雷門
     collaborator_email:
       - galit@gmail.com

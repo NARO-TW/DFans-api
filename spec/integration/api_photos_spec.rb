@@ -52,7 +52,6 @@ describe 'Test Photo Handling' do
     pho_data = DATA[:photos][0]
     album = @account.albums.first
     pho = album.add_photo(pho_data)
-
     header 'AUTHORIZATION', auth_header(@wrong_account_data)
     get "/api/v1/photos/#{pho.id}"
     result = JSON.parse last_response.body
@@ -61,13 +60,13 @@ describe 'Test Photo Handling' do
     _(result['attributes']).must_be_nil
   end
 
-    it 'SAD: should return error if photo does not exist' do
-      header 'AUTHORIZATION', auth_header(@account_data)
-      get '/api/v1/photos/foobar'
+  it 'SAD: should return error if photo does not exist' do
+    header 'AUTHORIZATION', auth_header(@account_data)
+    get '/api/v1/photos/foobar'
 
-      _(last_response.status).must_equal 404
-    end
+    _(last_response.status).must_equal 404
   end
+
 
   describe 'Creating Photos' do
     before do

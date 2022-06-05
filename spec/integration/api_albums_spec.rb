@@ -45,7 +45,6 @@ describe 'Test Album Handling' do
 
     it 'HAPPY: should be able to get details of a single album' do
       album = @account.add_owned_album(DATA[:albums][0])
-
       header 'AUTHORIZATION', auth_header(@account_data)
       get "/api/v1/albums/#{album.id}"
       _(last_response.status).must_equal 200
@@ -94,16 +93,15 @@ describe 'Test Album Handling' do
     it 'HAPPY: should be able to create new albums' do
       header 'AUTHORIZATION', auth_header(@account_data)
       post 'api/v1/albums', @album_data.to_json
-
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
       created = JSON.parse(last_response.body)['data']['attributes']
-      pho = DFans::Album.first
+      album = DFans::Album.first
 
-      _(created['id']).must_equal pho.id
-      _(created['name']).must_equal @pho_data['name']
-      # _(created['description']).must_equal @pho_data['description']
+      _(created['id']).must_equal album.id
+      _(created['name']).must_equal @album_data['name']
+      # _(created['description']).must_equal @album_data['description']
     end
 
     it 'SAD: should not create new album without authorization' do
@@ -117,7 +115,7 @@ describe 'Test Album Handling' do
     end
 
     it 'SECURITY: should not create album with mass assignment' do
-      bad_data = @pho_data.clone
+      bad_data = @album_data.clone
       bad_data['created_at'] = '1900-01-01'
       header 'AUTHORIZATION', auth_header(@account_data)
       post 'api/v1/albums', bad_data.to_json

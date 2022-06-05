@@ -37,9 +37,9 @@ module DFans
       {
         type: 'album',
         attributes: {
-          id:,
-          name:,
-          description:
+          id: id,
+          name: name,
+          description: description
         }
       }
     end
@@ -47,9 +47,9 @@ module DFans
     def full_details
       to_h.merge(
         relationships: {
-          owner:,
-          participants:,
-          photos:
+          owner: owner,
+          participants: participants,
+          photos: photos
         }
       )
     end
