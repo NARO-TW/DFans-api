@@ -18,7 +18,7 @@ module DFans
     end
 
     def self.call(auth:, album:, photo_data:)
-      policy = ProjectPolicy.new(auth[:account], auth[:album])
+      policy = AlbumPolicy.new(auth[:account], album, auth[:scope])
       raise ForbiddenError unless policy.can_add_photos?
 
       album.add_photo(photo_data)

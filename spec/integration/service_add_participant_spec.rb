@@ -11,6 +11,8 @@ describe 'Test AddParticipant service' do
       DFans::Account.create(account_data)
     end
     album_data = DATA[:albums].first
+
+    @owner_data = DATA[:accounts][0]
     @owner = DFans::Account.all[0]
     @participant = DFans::Account.all[1]
     @album = @owner.add_owned_album(album_data)

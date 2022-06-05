@@ -16,16 +16,14 @@ module DFans
 
         # GET api/v1/albums/[ID]
         routing.get do
-          album = GetAlbumQuery.call(account: @auth_account, album: @req_album
-          )
-
+          album = GetAlbumQuery.call(auth: @auth, album: @req_album)
           { data: album }.to_json
         rescue GetAlbumQuery::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue GetAlbumQuery::NotFoundError => e
           routing.halt 404, { message: e.message }.to_json
         rescue StandardError => e
-          puts "FIND PROJECT ERROR: #{e.inspect}"
+          puts "FIND ALBUM ERROR: #{e.inspect}"
           routing.halt 500, { message: 'API server error' }.to_json
         end
 
@@ -33,11 +31,10 @@ module DFans
           # POST api/v1/albums/[album_id]/photos
           routing.post do
             new_photo = CreatePhoto.call(
-              account: @auth,
+              auth: @auth,
               album: @req_album,
               photo_data: JSON.parse(routing.body.read)
             )
-
             response.status = 201
             response['Location'] = "#{@doc_route}/#{new_photo.id}"
             { message: 'Photo saved', data: new_photo }.to_json
@@ -55,11 +52,10 @@ module DFans
           # PUT api/v1/albums/[album_id]/participants
           routing.put do
             req_data = JSON.parse(routing.body.read)
-
             participant = AddParticipant.call(
-              account: @auth,
+              auth: @auth,
               album: @req_album,
-              collab_email: req_data['email']
+              parti_email: req_data['email']
             )
 
             { data: participant }.to_json
@@ -73,12 +69,12 @@ module DFans
           routing.delete do
             req_data = JSON.parse(routing.body.read)
             participant = RemoveParticipant.call(
-              req_username: @auth_account.username,
-              collab_email: req_data['email'],
+              auth: @auth,
+              parti_email: req_data['email'],
               album_id: album_id
             )
 
-            { message: "#{participant.username} removed from albumet",
+            { message: "#{participant.username} removed from album",
               data: participant }.to_json
           rescue RemoveParticipant::ForbiddenError => e
             routing.halt 403, { message: e.message }.to_json
@@ -101,7 +97,7 @@ module DFans
         # POST api/v1/albums
         routing.post do
           new_data = JSON.parse(routing.body.read)
-          new_album = CreateProjectForOwner.call(
+          new_album = CreateAlbumForOwner.call(
             auth: @auth, album_data: new_data
           )
 
@@ -115,7 +111,7 @@ module DFans
         rescue CreateAlbumForOwner::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
 
-        rescue StandardError
+        rescue StandardError => e
           Api.logger.error "Unknown error: #{e.message}"
           routing.halt 500, { message: 'API server error' }.to_json
         end

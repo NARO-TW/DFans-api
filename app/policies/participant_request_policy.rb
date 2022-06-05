@@ -4,16 +4,17 @@ module DFans
     # Policy to determine if an account can view a particular album
   class ParticipationRequestPolicy
     def initialize(album, requestor_account, target_account, auth_scope = nil)
-      @Album = Album
+      @album = album
       @requestor_account = requestor_account
       @target_account = target_account
+      @auth_scope = auth_scope
       @requestor = AlbumPolicy.new(requestor_account, album, auth_scope)
       @target = AlbumPolicy.new(target_account, album, auth_scope)
     end
 
     def can_invite?
       can_write? &&
-      (@requestor.can_add_participants? && @target.can_participant?)
+      (@requestor.can_add_participants? && @target.can_participate?)
     end
 
     def can_remove?

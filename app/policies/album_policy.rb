@@ -42,7 +42,7 @@ module DFans
       can_write? && account_is_owner?
     end
 
-    def can_collaborate?
+    def can_participate?
       !(account_is_owner? || account_is_participant?)
     end
 

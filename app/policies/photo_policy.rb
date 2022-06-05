@@ -18,8 +18,8 @@ class PhotoPolicy
 
   def can_delete?
     # the participates should not able to delete the photos in that album
-    # || account_collaborates_on_project?
-    can_write? && account_owns_project?
+    # || account_collaborates_on_album?
+    can_write? && account_owns_album?
   end
 
   def summary
@@ -44,7 +44,7 @@ class PhotoPolicy
     @photo.album.owner == @account
   end
 
-  def account_participants_on_ablum?
+  def account_participates_on_album?
     @photo.album.participants.include?(@album)
   end
 end

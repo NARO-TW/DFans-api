@@ -24,6 +24,7 @@ module DFans
 
       { account: Account.first(username: account_data['username']),
         scope: AuthScope.new(token.scope) }
+    end
   end
 end
 

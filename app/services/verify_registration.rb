@@ -16,9 +16,18 @@ module DFans
     end
 
     # rubocop:disable Layout/EmptyLineBetweenDefs
-    def from_email() = ENV['SENDGRID_FROM_EMAIL']
-    def mail_api_key() = ENV['SENDGRID_API_KEY']
-    def mail_url() = ENV['SENDGRID_API_URL']
+    def from_email()
+      ENV['SENDGRID_FROM_EMAIL']
+    end
+
+    def mail_api_key()
+      ENV['SENDGRID_API_KEY']
+    end
+
+    def mail_url()
+      ENV['SENDGRID_API_URL']
+    end
+    
     # rubocop:enable Layout/EmptyLineBetweenDefs
 
     def call

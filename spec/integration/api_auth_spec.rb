@@ -72,7 +72,7 @@ describe 'Test Authentication Routes' do
     end
 
     it 'HAPPY AUTH SSO: should authorize existing SSO account' do
-      Credence::Account.create(
+      DFans::Account.create(
         username: SSO_ACCOUNT['sso_username'],
         email: SSO_ACCOUNT['email']
       )
