@@ -11,6 +11,10 @@ Sequel.migration do
       String :filename, null: false
       String :description_secure
 
+      #support to be text based on the https://github.com/shrinerb/shrine
+      #text type: https://github.com/jeremyevans/sequel/blob/master/doc/schema_modification.rdoc
+      String :image_data, text: true 
+
       DateTime :created_at
       DateTime :updated_at
 
