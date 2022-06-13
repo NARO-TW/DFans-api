@@ -15,7 +15,7 @@ module DFans
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :filename, :relative_path, :description
+    set_allowed_columns :filename, :image_data, :description
 
     # Secure getters and setters
     def description
@@ -26,6 +26,14 @@ module DFans
       self.description_secure = SecureDB.encrypt(plaintext)
     end
 
+    def image_data
+      SecureDB.decrypt(image_data_secure)
+    end
+
+    def image_data=(plaintext)
+      self.image_data_secure = SecureDB.encrypt(plaintext)
+    end
+
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
       JSON(
@@ -34,6 +42,7 @@ module DFans
           attributes: {
             id: id,
             filename: filename,
+            image_data: image_data,
             description: description
           },
           include: {

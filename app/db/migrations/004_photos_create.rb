@@ -9,6 +9,7 @@ Sequel.migration do
       foreign_key :album_id, table: :albums
 
       String :filename, null: false
+      String :image_data_secure
       String :description_secure
 
       #support to be text based on the https://github.com/shrinerb/shrine
