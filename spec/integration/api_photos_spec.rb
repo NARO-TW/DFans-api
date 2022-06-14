@@ -32,6 +32,8 @@ describe 'Test Photo Handling' do
       result = JSON.parse(last_response.body)['data']
       _(result['attributes']['id']).must_equal pho.id
       _(result['attributes']['filename']).must_equal pho_data['filename']
+      _(result['attributes']['image_data']).must_equal pho_data['image_data']
+      _(result['attributes']['description']).must_equal pho_data['description']
     end
 
     it 'SAD AUTHORIZATION: should not get details without authorization' do
@@ -85,6 +87,7 @@ describe 'Test Photo Handling' do
 
       _(created['id']).must_equal pho.id
       _(created['filename']).must_equal @pho_data['filename']
+      _(created['image_data']).must_equal @pho_data['image_data']
       _(created['description']).must_equal @pho_data['description']
     end
 

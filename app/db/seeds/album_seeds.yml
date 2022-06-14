@@ -1,13 +1,5 @@
 ---
-- name: Pet Family
-  description: My pet family.
-  #tags: 
-  #  - dog
-  #  - cat
-  #  - family
-- name: Pet Kingdom
-  description: A kingdom governed by pets.
-  #tags: 
-  #  - pig
-  #  - fish
-  #  - monkey
+- name: Ruby
+  description: Say Hi!
+- name: Go Team
+  description: Cheer up!

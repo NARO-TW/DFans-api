@@ -1,8 +1,8 @@
 ---
-  - album_name: Data album
+  - album_name: Ruby
     collaborator_email:
       - furen@nthu.edu.tw
       - galit@gmail.com
-  - album_name: Config album 雷門
+  - album_name: Go Team
     collaborator_email:
       - galit@gmail.com
