@@ -7,10 +7,6 @@ module DFans
   # Models a secret photo
   class Photo < Sequel::Model
 
-    # follow https://github.com/shrinerb/shrine
-    # adds an `image` virtual attribute
-    include ImageUploader::Attachment(:image) 
-
     many_to_one :album
 
     plugin :timestamps

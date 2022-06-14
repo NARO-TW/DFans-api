@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby File.read('.ruby-version').strip
+#ruby File.read('.ruby-version').strip
 
 # Web API
 gem 'json'
 gem 'puma', '~>5'
 gem 'roda', '~>3'
-
-# File handling
-gem 'shrine'
-gem 'activerecord'
 
 # Configuration
 gem 'figaro', '~>1'
