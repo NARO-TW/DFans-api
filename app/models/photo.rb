@@ -11,7 +11,7 @@ module DFans
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :filename, :image_data, :description
+    set_allowed_columns :filename, :filetype, :image_data, :description
 
     # Secure getters and setters
     def description
@@ -38,8 +38,9 @@ module DFans
           attributes: {
             id: id,
             filename: filename,
-            image_data: image_data,
-            description: description
+            description: description,
+            filetype: filetype,
+            image_data: image_data
           },
           include: {
             album: album
