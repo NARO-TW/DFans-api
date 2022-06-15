@@ -30,13 +30,12 @@ module DFans
         routing.on('photos') do
           # POST api/v1/albums/[album_id]/photos
           routing.post do
-            puts "In API photo: routing.body.read: #{JSON.parse(routing.body.read)}"
             new_photo = CreatePhoto.call(
               auth: @auth,
               album: @req_album,
               photo_data: JSON.parse(routing.body.read)
             )
-            puts "In API photo: new_photo: #{new_photo}"
+            puts "In API photo: new_photo.keys(): #{new_photo.keys()}"
             response.status = 201
             response['Location'] = "#{@doc_route}/#{new_photo.id}"
             { message: 'Photo saved', data: new_photo }.to_json
