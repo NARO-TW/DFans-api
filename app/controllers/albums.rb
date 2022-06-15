@@ -35,7 +35,6 @@ module DFans
               album: @req_album,
               photo_data: JSON.parse(routing.body.read)
             )
-            puts "In API photo: new_photo.keys(): #{new_photo.keys()}"
             response.status = 201
             response['Location'] = "#{@doc_route}/#{new_photo.id}"
             { message: 'Photo saved', data: new_photo }.to_json
