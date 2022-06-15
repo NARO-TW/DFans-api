@@ -21,7 +21,7 @@ module DFans
       policy = AlbumPolicy.new(auth[:account], album, auth[:scope])
       raise ForbiddenError unless policy.can_add_photos?
       album.add_photo(photo_data)
-      puts "In CreatePhoto: album.add_photo(photo_data): #{album.add_photo(photo_data)}"
+      puts "In CreatePhoto: album.add_photo(photo_data)"
     rescue Sequel::MassAssignmentRestriction
       raise IllegalRequestError
     end

@@ -19,7 +19,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      unique [:album_id]
+      unique [:album_id, :filename]
     end
   end
 end
