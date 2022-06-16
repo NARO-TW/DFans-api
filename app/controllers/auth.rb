@@ -6,12 +6,18 @@ require_relative './app'
 module DFans
   # Web controller for Credence API
   class Api < Roda
-    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
+    route('auth') do |routing|
+      # All requests in this route require signed requests
+      begin
+        @request_data = SignedRequest.new(Api.config).parse(request.body.read)
+      rescue SignedRequest::VerificationError
+        routing.halt '403', { message: 'Must sign request' }.to_json
+      end
+
       routing.on 'register' do
         # POST api/v1/auth/register
         routing.post do
-          reg_data = JsonRequestBody.parse_symbolize(request.body.read)
-          VerifyRegistration.new(reg_data).call
+          VerifyRegistration.new(@request_data).call
 
           response.status = 202 # Status 202 suggests the start of a process
           { message: 'Verification email sent' }.to_json
@@ -28,8 +34,7 @@ module DFans
       routing.is 'authenticate' do
         # POST /api/v1/auth/authenticate
         routing.post do
-          credentials = JsonRequestBody.parse_symbolize(request.body.read)
-          auth_account = AuthenticateAccount.call(credentials)
+          auth_account = AuthenticateAccount.call(@request_data)
           { data: auth_account }.to_json
         rescue AuthenticateAccount::UnauthorizedError
           routing.halt '401', { message: 'Invalid credentials' }.to_json
@@ -38,10 +43,9 @@ module DFans
 
       # POST /api/v1/auth/sso
       routing.post 'sso' do
-        auth_request = JsonRequestBody.parse_symbolize(request.body.read)
-        auth_account = AuthorizeSso.new.call(auth_request[:access_token])
+        auth_account = AuthorizeSso.new.call(@request_data[:access_token])
         { data: auth_account }.to_json
-      rescue StandardError => error
+      rescue StandardError => e
         puts "FAILED to validate Github account: #{error.inspect}"
         puts error.backtrace
         routing.halt 400
