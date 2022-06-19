@@ -17,7 +17,7 @@ module DFans
         user_agent: 'DFans',
         authorization: "token #{access_token}",
         accept: 'application/json'
-      ).get(ENV['GITHUB_ACCOUNT_URL'])
+      ).get(ENV.fetch('GITHUB_ACCOUNT_URL'))
 
       raise unless gh_response.status == 200
 
@@ -34,7 +34,7 @@ module DFans
       {
         type: 'sso_account',
         attributes: {
-          account: account,
+          account:,
           auth_token: AuthToken.create(account)
         }
       }
