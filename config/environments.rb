@@ -27,7 +27,7 @@ module DFans
       db_url = ENV.delete('DATABASE_URL')
       DB = Sequel.connect("#{db_url}?encoding=utf8")
       def self.DB # rubocop:disable Naming/MethodName
-        DB 
+        DB
       end
       # Logger setup
       LOGGER = Logger.new($stderr)
