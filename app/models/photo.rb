@@ -6,7 +6,6 @@ require 'sequel'
 module DFans
   # Models a secret photo
   class Photo < Sequel::Model
-
     many_to_one :album
 
     plugin :timestamps
@@ -36,15 +35,15 @@ module DFans
         {
           type: 'photo',
           attributes: {
-            id: id,
-            filename: filename,
-            description: description,
-            filetype: filetype,
-            image_data: image_data,
-            enc_type: enc_type
+            id:,
+            filename:,
+            description:,
+            filetype:,
+            image_data:,
+            enc_type:
           },
           include: {
-            album: album
+            album:
           }
         }, options
       )
