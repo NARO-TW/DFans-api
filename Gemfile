@@ -51,3 +51,5 @@ group :development, :test do
   gem 'sequel-seed'
   gem 'sqlite3'
 end
+
+gem 'simplecov'
