@@ -54,7 +54,7 @@ class AuthToken
   def to_s
     @token
   end
-  
+
   # Create a token from a Hash payload
   def self.create(payload, scope = AuthScope.new, expiration = ONE_WEEK)
     tokenize(
