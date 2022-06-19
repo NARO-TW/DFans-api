@@ -32,14 +32,13 @@ module DFans
       self.description_secure = SecureDB.encrypt(plaintext)
     end
 
-    # rubocop:disable Metrics/MethodLength
     def to_h
       {
         type: 'album',
         attributes: {
-          id: id,
-          name: name,
-          description: description
+          id:,
+          name:,
+          description:
         }
       }
     end
@@ -47,9 +46,9 @@ module DFans
     def full_details
       to_h.merge(
         relationships: {
-          owner: owner,
-          participants: participants,
-          photos: photos
+          owner:,
+          participants:,
+          photos:
         }
       )
     end

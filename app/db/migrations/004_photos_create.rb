@@ -14,7 +14,7 @@ Sequel.migration do
       String :description_secure
       String :filetype
 
-      #text type: https://github.com/jeremyevans/sequel/blob/master/doc/schema_modification.rdoc
+      # text type: https://github.com/jeremyevans/sequel/blob/master/doc/schema_modification.rdoc
 
       DateTime :created_at
       DateTime :updated_at

@@ -6,19 +6,19 @@ class AccountPolicy
     @requestor = requestor
     @account = account
   end
-  
+
   def can_view?
     self_request?
   end
-  
+
   def can_edit?
     self_request?
   end
-  
+
   def can_delete?
     self_request?
   end
-  
+
   def summary
     {
       can_view: can_view?,
@@ -26,9 +26,9 @@ class AccountPolicy
       can_delete: can_delete?
     }
   end
-  
+
   private
-  
+
   def self_request?
     @requestor == @account
   end

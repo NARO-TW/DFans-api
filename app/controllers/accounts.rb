@@ -6,7 +6,7 @@ require_relative './app'
 module DFans
   # Web controller for DFans API
   class Api < Roda
-    route('accounts') do |routing| # rubocop:disable Metrics/BlockLength
+    route('accounts') do |routing|
       @account_route = "#{@api_root}/accounts"
 
       routing.on String do |username|
@@ -15,7 +15,7 @@ module DFans
         # GET api/v1/accounts/[username]
         routing.get do
           auth = AuthorizeAccount.call(
-            auth: @auth, username: username,
+            auth: @auth, username:,
             auth_scope: AuthScope.new(AuthScope::READ_ONLY)
           )
           { data: auth }.to_json

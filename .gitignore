@@ -3,3 +3,6 @@ _*
 .irb_history
 app/db/store/*.db
 config/secrets.yml
+# other files
+coverage/*
+!coverage/.resultset.json
