@@ -6,7 +6,7 @@ require_relative './app'
 module DFans
   # Web controller for Credence API
   class Api < Roda
-    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
+    route('auth') do |routing|
       routing.on 'register' do
         # POST api/v1/auth/register
         routing.post do
@@ -41,7 +41,7 @@ module DFans
         auth_request = JsonRequestBody.parse_symbolize(request.body.read)
         auth_account = AuthorizeSso.new.call(auth_request[:access_token])
         { data: auth_account }.to_json
-      rescue StandardError => error
+      rescue StandardError => e
         puts "FAILED to validate Github account: #{error.inspect}"
         puts error.backtrace
         routing.halt 400

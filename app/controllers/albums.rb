@@ -2,11 +2,9 @@
 
 require_relative './app'
 
-# rubocop:disable Metrics/BlockLength
 module DFans
   # Web controller for DFans API
   class Api < Roda
-    # rubocop:disable Metrics/BlockLength
     route('albums') do |routing|
       routing.halt(403, UNAUTH_MSG) unless @auth_account
 
@@ -71,7 +69,7 @@ module DFans
             participant = RemoveParticipant.call(
               auth: @auth,
               parti_email: req_data['email'],
-              album_id: album_id
+              album_id:
             )
 
             { message: "#{participant.username} removed from album",
@@ -84,7 +82,7 @@ module DFans
         end
       end
 
-      routing .is do
+      routing.is do
         # GET api/v1/albums
         routing.get do
           albums = AlbumPolicy::AccountScope.new(@auth_account).viewable
@@ -107,7 +105,7 @@ module DFans
         rescue Sequel::MassAssignmentRestriction
           Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
           routing.halt 400, { message: 'Illegal Request' }.to_json
-          
+
         rescue CreateAlbumForOwner::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
 
@@ -117,7 +115,5 @@ module DFans
         end
       end
     end
-    # rubocop:enable Metrics/BlockLength
   end
 end
-# rubocop:enable Metrics/BlockLength

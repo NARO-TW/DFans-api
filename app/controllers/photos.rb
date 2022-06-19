@@ -6,9 +6,7 @@ module DFans
   # Web controller for Credence API
   class Api < Roda
     route('photos') do |routing|
-      unless @auth_account
-        routing.halt 403, { message: 'Not authorized' }.to_json
-      end
+      routing.halt 403, { message: 'Not authorized' }.to_json unless @auth_account
 
       @pho_route = "#{@api_root}/photos"
 
