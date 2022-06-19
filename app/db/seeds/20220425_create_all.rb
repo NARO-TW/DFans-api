@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-
 require './app/controllers/helpers.rb'
 include DFans::SecureRequestHelpers
-
 
 Sequel.seed(:development) do
   def run
@@ -11,7 +9,7 @@ Sequel.seed(:development) do
     create_accounts
     create_owned_albums
     create_photos
-#    add_participant
+    # add_participant
   end
 end
 
@@ -21,7 +19,7 @@ ACCOUNTS_INFO = YAML.load_file("#{DIR}/accounts_seed.yml")
 OWNER_INFO = YAML.load_file("#{DIR}/owners_albums.yml")
 ALBUM_INFO = YAML.load_file("#{DIR}/album_seeds.yml")
 PHOTO_INFO = YAML.load_file("#{DIR}/photo_seeds.yml")
-#PARTI_INFO = YAML.load_file("#{DIR}/albums_participants.yml")
+# PARTI_INFO = YAML.load_file("#{DIR}/albums_participants.yml")
 
 def create_accounts
   ACCOUNTS_INFO.each do |account_info|
@@ -45,13 +43,9 @@ def create_photos
   loop do
     pho_info = pho_info_each.next
     album = albums_cycle.next
-
     auth_token = AuthToken.create(album.owner)
-    auth = scoped_auth(auth_token)    
-
-    DFans::CreatePhoto.call(
-      auth: auth, album: album, photo_data: pho_info
-    )
+    auth = scoped_auth(auth_token)
+    DFans::CreatePhoto.call(auth:, album:, photo_data: pho_info)
   end
 end
 
@@ -61,11 +55,10 @@ def add_participants
     album = DFans::Album.first(name: parti['album_name'])
     auth_token = AuthToken.create(album.owner)
     auth = scoped_auth(auth_token)
-
     parti['participant_email'].each do |email|
       account = album.owner
       DFans::AddParticipant.call(
-        auth: auth, album: album, parti_email: email
+        auth:, album:, parti_email: email
       )
     end
   end

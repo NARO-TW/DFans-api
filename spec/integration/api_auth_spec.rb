@@ -43,7 +43,6 @@ describe 'Test Authentication Routes' do
     end
   end
 
-
   describe 'SSO Authorization' do
     before do
       WebMock.enable!

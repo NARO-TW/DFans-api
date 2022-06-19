@@ -26,7 +26,7 @@ module DFans
       create(username: github_account[:username],
              email: github_account[:email])
     end
-    
+
     def albums
       owned_albums + participations
     end
@@ -45,8 +45,8 @@ module DFans
         {
           type: 'account',
           attributes: {
-            username: username,
-            email: email
+            username:,
+            email:
           }
         }, options
       )

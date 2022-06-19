@@ -28,7 +28,7 @@ module DFans
       {
         type: 'authenticated_account',
         attributes: {
-          account: account,
+          account:,
           auth_token: AuthToken.create(account)
         }
       }

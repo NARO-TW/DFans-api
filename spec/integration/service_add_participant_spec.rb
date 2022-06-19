@@ -22,7 +22,7 @@ describe 'Test AddParticipant service' do
     auth = authorization(@owner_data)
 
     DFans::AddParticipant.call(
-      auth: auth,
+      auth:,
       album: @album,
       parti_email: @participant.email
     )
@@ -37,7 +37,7 @@ describe 'Test AddParticipant service' do
     )
     _(proc {
       DFans::AddParticipant.call(
-        auth: auth,
+        auth:,
         album: @album,
         parti_email: @owner.email
       )

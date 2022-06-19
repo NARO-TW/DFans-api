@@ -15,24 +15,22 @@ module DFans
       @registration = registration
     end
 
-    # rubocop:disable Layout/EmptyLineBetweenDefs
-    def from_email()
-      ENV['SENDGRID_FROM_EMAIL']
+    def from_email
+      ENV.fetch('SENDGRID_FROM_EMAIL')
     end
 
-    def mail_api_key()
-      ENV['SENDGRID_API_KEY']
+    def mail_api_key
+      ENV.fetch('SENDGRID_API_KEY')
     end
 
-    def mail_url()
-      ENV['SENDGRID_API_URL']
+    def mail_url
+      ENV.fetch('SENDGRID_API_URL')
     end
-    
-    # rubocop:enable Layout/EmptyLineBetweenDefs
 
     def call
       raise(InvalidRegistration, 'Username exists') unless username_available?
       raise(InvalidRegistration, 'Email already used') unless email_available?
+
       send_email_verification
     end
 

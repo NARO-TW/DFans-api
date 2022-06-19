@@ -6,7 +6,7 @@ require_relative './app'
 module DFans
   # Web controller for Credence API
   class Api < Roda
-    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
+    route('auth') do |routing|
       routing.on 'register' do
         # POST api/v1/auth/register
         routing.post do

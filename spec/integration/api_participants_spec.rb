@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'pry'
 require_relative '../spec_helper'
 
@@ -27,7 +28,7 @@ describe 'Test Participant Handling' do
       header 'AUTHORIZATION', auth_header(@account_data)
       put "api/v1/albums/#{@album.id}/participants", req_data.to_json
       added = JSON.parse(last_response.body)['data']['attributes']
-      
+
       _(last_response.status).must_equal 200
       _(added['username']).must_equal @another_account.username
     end

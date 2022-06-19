@@ -69,7 +69,6 @@ describe 'Test Photo Handling' do
     _(last_response.status).must_equal 404
   end
 
-
   describe 'Creating Photos' do
     before do
       @album = DFans::Album.first
